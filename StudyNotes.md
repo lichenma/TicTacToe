@@ -12,7 +12,7 @@ many of the basics of building a turn based game.
 
 
 <br><br>
-##Introduction
+## Introduction
 
 
 We begin with an introduction to the development of this application, starting with a basic overview of
@@ -77,17 +77,17 @@ Here is a brief look at the model that the application will use:
 ```
 
 
-					move 
+						move 
 
-			   id		  int	  	PK
-			   player_id	  int		FK
-			   game_id	  int		FK
-			   board_row	  int	
-		|	   board_column	  int	
-		|	   created	  timestamp
-		|
-		|
-		|
+			   	id		  int	  	PK
+			   	player_id	  int		FK
+			   	game_id	  int		FK
+			   	board_row	  int	
+			   	board_column	  int	
+			   	created	  timestamp
+		
+		
+		
 
 
 
@@ -96,13 +96,29 @@ Here is a brief look at the model that the application will use:
 	     player							      game 
 
    id		      int		PK		     id			  int               PK
-   user_name	      varchar(64)			     first_player_id
-   password_hash      varchar(64)
-   email	      varchar(128)
-
+   user_name	      varchar(64)			     first_player_id	  int		    FK
+   password_hash      varchar(64)			     second_player_id	  int             N FK
+   email	      varchar(128)			     created              timestamp
+							     game_status          varchar(255)
+							     game_type		  varchar(255)
+							     
+							     first_player_piece_code   char(1)
 ```
 
 
+For the application purposes, we need three tables. The game table stores the game moves, the move 
+table contains a list of all player moves for each particular game, and the player table stores all the
+player-specific data. 
+
+
+
+<br><br>
+## The Game Table 
+
+
+The game table contains these columns: 
+
+* first\_player\_id: references the Player
 
 
 
