@@ -144,7 +144,41 @@ The game table contains these columns:
 
 
 Before we jump into the creation of the tables we notice that these tables are all stored in a 
-structure known as the Data Transfer Object (DTO). 
+structure known as the Data Transfer Object (DTO). This is a common design pattern used to manage data
+in Java and shows up frequently along with Data Access Object (DAO) 
+
+<br>
+### Data Transfer Object 
+
+A data container used to transport data between the classes and modules of an application. DTO should 
+only contain private fields for your data, getters, setters, and constructors. It should not contain
+any business logic and would look something like: 
+
+```java 
+interface PersonDTO {
+	
+	String getName(); 
+	void setName(String name);
+	...
+}
+```
+
+<br>
+### Data Access Object 
+
+An object or an interface that provides access to an underlying database or any other persistence
+storage. It should encapsulate the logic for retrieving, saving and updating data in your data storage
+and would look something like: 
+
+```java 
+interface PersonDAO {
+	
+	PersonDTO findById(long id);
+	void save(PersonDTO person);
+	...
+}
+```
+
 
 
 
