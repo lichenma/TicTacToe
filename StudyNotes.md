@@ -139,6 +139,17 @@ The game table contains these columns:
 
 
 
+<br><br> 
+## Data Transfer Object (DTO) and Data Access Object (DAO) 
+
+
+Before we jump into the creation of the tables we notice that these tables are all stored in a 
+structure known as the Data Transfer Object (DTO). 
+
+
+
+
+
 <br><br>
 ## Object-Relational Mapping with Hibernate 
 
