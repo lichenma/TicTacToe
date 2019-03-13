@@ -241,7 +241,27 @@ constructors respectively.
 <br><br> 
 ## The Move Table 
 
+The move table will store all information related to players' moves. Looking at this table, we can see
+who made what move, in which game, at what time, and in which cell. 
 
+
+```
+
+
+						move 
+
+			   	id		  int	  	PK
+			   	player_id	  int		FK
+			   	game_id	  int		FK
+			   	board_row	  int	
+			   	board_column	  int	
+			   	created	  timestamp
+```	
+
+The Java entity that will generate this table is very similar to the one used for Game entity: 
+
+
+```java 
 
 
 
