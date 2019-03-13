@@ -118,7 +118,25 @@ player-specific data.
 
 The game table contains these columns: 
 
-* first\_player\_id: references the Player
+
+* first\_player\_id: references the Player table. Its values relates to the player that created the 
+  game 
+
+* second\_player\_id: references the second player in the game. This value can be nullable, because the
+  second player may be the application ("COMPUTER") 
+
+* created: contains the date and time when the game was created 
+
+* game\_status: contains possible game statuses: WAITS\_FOR\_PLAYER, IN\_PROGRESS, FIRST\_PLAYER\_WON,
+  SECOND\_PLAYER\_WON, TIE. Its value is checked by the database in a CHECK constraint 
+
+* game\_type: contains two possible game types : COMPUTER or COMPETITION. This value is also checked by
+  the database in a CHECK constraint
+
+* first\_player\_piece\_code: stores the values 'X' or 'O'. This value too is checked by a CHECK 
+  constraint 
+
+
 
 
 
