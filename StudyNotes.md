@@ -188,6 +188,58 @@ public class Game {
 	@Column(name = "created", nullable = false) 
 	private Date created;
 }
+```
+
+
+The Code corresponds to the following table: 
+
+
+```
+	  			      game 
+
+
+   		     id			  	  int               PK
+   		     first_player_id	  	  int		    FK
+   		     second_player_id	  	  int             N FK
+   		     created              	  timestamp 	
+		     game_status        	  varchar(255)
+		     game_type		 	  varchar(255)
+		     first_player_piece_code   	  char(1)
+```
+
+
+
+Notice that no constructors or getters and setters are written explicity. Rather, they are generated.
+We use the Lombok library for this. 
+
+
+
+As we can see, the Game class is annotated by *@Getter* and *@Setter*. These annotations are
+responsible for generating getters and setters for each field in the class. The *@NoArgsConstructor* 
+and *@AllArgsConstructor* annotators are responsible for generating the default and all-args 
+constructors respectively. 
+
+
+<br><br> 
+**Hibernate Cheat Sheet**
+
+* @Entity	    Marks a class as an entity bean
+* @Id		    Marks a field as a primary key 
+* @GeneratedValue   Defines a primary key generation strategy
+* @Column	    Specifies the details of the column to which the field will be mapped 
+* @ManyToOne	    Maps a many-to-one relationship
+* @JoinColumn	    Indicates the entity is the owner of the relationship 
+		    (The corresponding table has a column with a foreign key to the referenced table)
+* @Enumerated 	    Coverts database data to and from Java enum types 
+* @Check	    Defines the optional check constraint based on the SQL statement 
+
+
+
+
+
+
+<br><br> 
+## The Move Table 
 
 
 
