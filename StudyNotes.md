@@ -143,9 +143,9 @@ The game table contains these columns:
 ## Data Transfer Object (DTO) and Data Access Object (DAO) 
 
 
-Before we jump into the creation of the tables we notice that these tables are all stored in a 
-structure known as the Data Transfer Object (DTO). This is a common design pattern used to manage data
-in Java and shows up frequently along with Data Access Object (DAO) 
+Before we jump into the creation of the tables we notice that the methods for managing this data is 
+stored in a  structure known as the Data Transfer Object (DTO). This is a common design pattern used to
+manage data in Java and shows up frequently along with Data Access Object (DAO) 
 
 <br>
 ### Data Transfer Object 
@@ -297,17 +297,44 @@ who made what move, in which game, at what time, and in which cell.
 
 			   	id		  int	  	PK
 			   	player_id	  int		FK
-			   	game_id	  int		FK
+			   	game_id	 	  int		FK
 			   	board_row	  int	
 			   	board_column	  int	
-			   	created	  timestamp
+			   	created	  	  timestamp
 ```	
 
 The Java entity that will generate this table is very similar to the one used for Game entity: 
 
 
 ```java 
+@Entity
+@Getter 
+@Setter 
+@NoArgsConstructor
+@AllArgsConstructor
+public class Move {
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name="id", nullable=false)
+	private int id;
 
+	@ManyToOne
+	@JoinColumn(name="game_id", nullable=false)
+	private Game game;
+
+	@Column(name="board_row", nullable=false)
+	private int boardRow; 
+
+	@Column(name="board_column", nullable=false)
+	private int boardColumn; 
+
+	@ManyToOne
+	@JoinColumn(name="player_id", nullable=true)
+	private Player player;
+
+
+}
 
 
 
