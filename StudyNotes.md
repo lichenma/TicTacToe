@@ -291,8 +291,6 @@ who made what move, in which game, at what time, and in which cell.
 
 
 ```
-
-
 						move 
 
 			   	id		  int	  	PK
@@ -333,9 +331,29 @@ public class Move {
 	@JoinColumn(name="player_id", nullable=true)
 	private Player player;
 
-
+	@Column(name="created", nullable=false)
+	private Date created;
 }
+```
 
+
+
+
+<br><br>
+## The Player Table 
+
+Finally, let's take a look at the player table. It stores player-specific data: each player's 
+user\_name, password\_hash, and email. 
+
+
+```
+	     player							      game 
+
+   id		      int		PK		     id			  int               PK
+   user_name	      varchar(64)			     first_player_id	  int		    FK
+   password_hash      varchar(64)			     second_player_id	  int             N FK
+   email	      varchar(128)			     created              timestamp
+	
 
 
 
