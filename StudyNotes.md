@@ -347,15 +347,55 @@ user\_name, password\_hash, and email.
 
 
 ```
-	     player							      game 
+	     				     player						
+ 				
 
-   id		      int		PK		     id			  int               PK
-   user_name	      varchar(64)			     first_player_id	  int		    FK
-   password_hash      varchar(64)			     second_player_id	  int             N FK
-   email	      varchar(128)			     created              timestamp
+			     id		        int		PK
+   			     user_name	        varchar(64)
+   			     password_hash      varchar(64)
+   			     email	        varchar(128)
+```	
+
+
+Once again, the Java entity for Player Table is similar to the one used for Game entity: 
+
+
+```java 
+@Entity
+@Getter 
+@Setter 
+public class Player {
 	
+	public Player() {}
+
+	public Player(String userName, String email, String password) {
+		this.userName=userName; 
+		this.email=email;
+		this.password=password;
+	}
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name="id", nullable=false)
+	private int id; 
+
+	@Column(name="user_name", unique=true, nullable=false) 
+	private String userName; 
+
+	@Column(name="email", unique=true, nullable=false) 
+	private String email; 
+
+	@Column(name="password", nullable=false) 
+	private String password; 
+}
+```
 
 
+<br><br> 
+## The Technology
+
+<br>
+### Spring Boot 
 
 
 
