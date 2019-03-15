@@ -397,8 +397,13 @@ public class Player {
 <br>
 ### Spring Boot 
 
+This application consists of many elements so lets take a look at the various packages that make up the
+Spring Boot content. After going into src/main/java/com.webservice.tictactoe here is a brief overview 
+of the many folders and layers that you will see: 
 
-
+* The **config** package contains the HTTP Security configuration 
+* The **controller** package contains classes that handle HTTP requests 
+* 
 
 
 
