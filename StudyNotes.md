@@ -403,8 +403,24 @@ of the many folders and layers that you will see:
 
 * The **config** package contains the HTTP Security configuration 
 * The **controller** package contains classes that handle HTTP requests 
-* 
+* The **domain** package contains the entity classes 
+* The **DTO** package contains the classes used to map request parameters 
+* The **enums** package contains the enums used in entity classes and that are mapped to appropriate 
+  columns in the **game** table. In this case, the enums are GameStatus (possible game statuses), 
+  GameType (possible game types) and Piece (pieces available in the game). 
+* The **repository** package contains the repository interfaces that provide CRUD functionality to the 
+  entity classes
+* The **security** package contains the classes responsible for user authentication
+* The **service** package identifies the application layer that encapsulates the business logic,
+  controls transactions, etc...
 
+
+<br> 
+# AngularJS
+
+The Angular application content is located in the webapp package and the main configuration is placed
+in the application.js file. As seen below, the first line of this file is the TicTacToe module 
+declaration, which specifies how the application should be bootstrapped. 
 
 
 
