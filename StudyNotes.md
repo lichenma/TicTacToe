@@ -420,7 +420,31 @@ of the many folders and layers that you will see:
 
 The Angular application content is located in the webapp package and the main configuration is placed
 in the application.js file. As seen below, the first line of this file is the TicTacToe module 
-declaration, which specifies how the application should be bootstrapped. 
+declaration, which specifies how the application should be bootstrapped. The dependency modules are in
+the square brackets. After that, the routing config is specified: this divides the application into 
+logical views and binds the different views to controllers
+
+```javascript
+var ticTacToe = angular.module('ticTacToe', ['ngRoute', 'gameModule']);
+
+ticTacToe.config(['$routeProvider', function($routeProvider) {
+	$routeProvider.
+		when('/about', {
+			templateUrl: 'templates/about.html'
+		}).
+		when('/game/:id', {
+			templateUrl: 'templates/game-board.html',
+			controller: 'gameController'
+		}).
+		when('/player/panel', {
+			templateUrl: 'templates/player-panel.html',
+			controller: 'newGameController'
+		}).
+		otherwise({
+			redirectTo: '/player/panel'
+		});
+}]);
+```
 
 
 
