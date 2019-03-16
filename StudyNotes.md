@@ -411,10 +411,9 @@ of the many folders and layers that you will see:
 * The **security** package contains the classes responsible for user authentication
 * The **service** package identifies the application layer that encapsulates the business logic,
   controls transactions, etc...
-
-
-<br> 
-# AngularJS
+ 
+<br><br>
+**AngularJS**
 
 The Angular application content is located in the webapp package and the main configuration is placed
 in the application.js file. As seen below, the first line of this file is the TicTacToe module 
