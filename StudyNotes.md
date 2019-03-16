@@ -446,6 +446,15 @@ ticTacToe.config(['$routeProvider', function($routeProvider) {
 }]);
 ```
 
+The above code defines three urls that are mapped by views: templates/about.html, 
+templates/game-board.html and templates/player-panel.html. For example, when we open 
+**http://localhost:8080/#/player/panel** in the browser, Angular automatically matches it with the 
+route we configured and loads the templates/player-panel.html template. It then invokes 
+newGameController, where the logic for the view is added. 
+
+
+<br><br> 
+
 
 
 
