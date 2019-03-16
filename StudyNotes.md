@@ -393,7 +393,7 @@ public class Player {
 
 <br><br> 
 ## The Technology
-**Spring Boot**
+### Spring Boot
 
 This application consists of many elements so lets take a look at the various packages that make up the
 Spring Boot content. After going into src/main/java/com.webservice.tictactoe here is a brief overview 
@@ -413,7 +413,7 @@ of the many folders and layers that you will see:
   controls transactions, etc...
  
 <br><br>
-**AngularJS**
+###AngularJS
 
 The Angular application content is located in the webapp package and the main configuration is placed
 in the application.js file. As seen below, the first line of this file is the TicTacToe module 
@@ -451,7 +451,13 @@ newGameController, where the logic for the view is added.
 
 
 <br><br> 
+## Implementation 
 
+When discussing functionality, we are only focusing on particular elements and starting with what we 
+see on screen and ending with the database. 
+
+<br><br> 
+### User Authentication with Spring Security 
 
 
 
