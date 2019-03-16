@@ -393,8 +393,6 @@ public class Player {
 
 <br><br> 
 ## The Technology
-
-<br>
 **Spring Boot**
 
 This application consists of many elements so lets take a look at the various packages that make up the
