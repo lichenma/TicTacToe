@@ -395,7 +395,7 @@ public class Player {
 ## The Technology
 
 <br>
-### Spring Boot 
+**Spring Boot**
 
 This application consists of many elements so lets take a look at the various packages that make up the
 Spring Boot content. After going into src/main/java/com.webservice.tictactoe here is a brief overview 
