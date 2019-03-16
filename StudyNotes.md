@@ -413,7 +413,7 @@ of the many folders and layers that you will see:
   controls transactions, etc...
  
 <br><br>
-###AngularJS
+### AngularJS
 
 The Angular application content is located in the webapp package and the main configuration is placed
 in the application.js file. As seen below, the first line of this file is the TicTacToe module 
@@ -450,14 +450,67 @@ route we configured and loads the templates/player-panel.html template. It then 
 newGameController, where the logic for the view is added. 
 
 
+
+
 <br><br> 
 ## Implementation 
 
 When discussing functionality, we are only focusing on particular elements and starting with what we 
 see on screen and ending with the database. 
 
+
+
 <br><br> 
 ### User Authentication with Spring Security 
+
+When we start the game app, we will be redirected to an automatically-generated login form. We will not
+be worrying about user authentication as the application leaves it to Spring Security. The Spring 
+application will present a login form to the player, check whether each request is carred out by an 
+authenticated user, etc. 
+
+
+We have already placed Spring Security in the dependencies section in build.gradle so we can go ahead 
+and examine the configuration. We will be looking at the code for two classes: ContextUser and 
+UserDetailsServiceImpl. 
+
+
+<br><br>
+```java 
+public class ContextUser extends org.springframework.security.core.userdetails.User {
+	
+	private final Player player; 
+
+	public ContextUser(Player player) {
+		
+		super(player.getUserName(), 
+			player.getPassword(),
+			true,
+			true,
+			true,
+			true,
+			ImmutableSet.of(new SimpleGrantedAuthority("create")));
+
+		this.player=player;
+	}
+
+	public Player getPlayer() {
+		
+		return player;
+	}
+}
+```
+
+The ContextUser class constructs the user object by extending the User class from Spring Security
+with the details required by DaoAuthenticationProvider(). In this case, the credentials will be the 
+player's username and password. If the user provides a correct username and password combination, they
+will be granted "create" authority. Other parameters in the constructor are set to true; we are not 
+concerned if the account has expired or if the app is locked because it is being used as a demo. 
+
+
+
+<br><br> 
+```java 
+
 
 
 
