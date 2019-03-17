@@ -156,6 +156,10 @@ gameModule.controller('gameController', ['$rootScope', '$routeParams', '$scope',
                 return true;
             }
 
-            scope.rows =
+            scope.rows = [
+                [
+                    {'id': '11', 'letter': '', 'class': 'box'}
+                ]
+            ]
 
     }])

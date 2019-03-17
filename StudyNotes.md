@@ -778,8 +778,45 @@ scope and the rootScope, the application uses the one in the current scope.
 <br><br> 
 ## AngularJS Services
 
+In AngularJS you can make your own service or use one of the many built-in services. A service is a 
+function or object that is available for and limited to your AngularJS application. 
 
 
+There are around 30 built-in services and two common ones that will be used extensively in the
+TicTacToe application are the **$location** and **$http** services. 
+
+
+The **$location** service has methods which return information about the location of the current web
+page: 
+
+
+
+```html
+var app = angular.module('myApp', []);
+app. controller('customersCtrl', function($scope, $location) {
+	$scope.myUrl = $location.absUrl();
+});
+```
+Note that the $location service is passed in to the controller as an argument. In order to user the
+service in the controller, it must be defined as a dependency. 
+
+
+
+
+<br><br>
+
+The **$http** service is one of the most common used services in AngularJS applications. The service
+makes a request to the server and lets your application handle the response:
+
+
+```html
+var app = angular.module('myApp', []);
+app.controller('myCtrl', function($scope, $http) {
+	$http.get("welcome.htm").then(function (response) {
+		$scope.myWelcome = response.data;
+	});
+});
+```
 
 
 
