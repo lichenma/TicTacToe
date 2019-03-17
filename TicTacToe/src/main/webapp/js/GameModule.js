@@ -155,4 +155,7 @@ gameModule.controller('gameController', ['$rootScope', '$routeParams', '$scope',
                 }
                 return true;
             }
+
+            scope.rows =
+
     }])

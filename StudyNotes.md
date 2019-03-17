@@ -624,6 +624,165 @@ public interface PlayerRepository extends CrudRepository<Player, Long> {
 
 
 
+<br><br>
+## AngularJS Summary
+
+
+Here we will cover some basics regarding AngularJS, focusing mostly on basic general information 
+regarding AngularJS. I added this section to go over some basics before diving into the front-end 
+section of this application - courtesy of w3schools.  
+
+
+
+AngularJS is a JavaScript framework that extends HTML attributes with Directives and binds data to 
+HTML with Expressions. It is distributed as a JavaScript file and can be added to a webpage with a 
+script tag 
+
+```html
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+```
+
+
+
+
+As mentioned above, AngularJS extends HTML with ng-directives: 
+
+* the **ng-app** directive defines an AngularJS application
+* the **ng-model** directive binds the value of HTML controls (input, select, textarea) to the 
+  application data 
+* the **ng-bind** directive binds application data to the HTML view 
+
+
+
+<br><br>
+## AngularJS Controllers
+
+AngularJS controllers control the data of AngularJS applications and are regular JavaScript Objects. 
+The ng-controller directive defines the application controller - a controller is a JavaScript Object,
+created by a standard JavaScript object constructor. 
+
+
+Example: 
+
+```html
+<div ng-app="myApp" ng-controller="myCtrl">
+
+First Name: <input type="text" ng-model="firstName"><br>
+Last Name: <input type="text" ng-model="lastName"><br>
+<br>
+Full Name: {{firstName + " " + lastName}}
+
+</div>
+
+<script> 
+var app = angular.module('myApp', []);
+app.controller('myCtrl', function($scope) {
+	$scope.firstName = "John";
+	$scope.lastName = "Doe";
+});
+</script> 
+```
+
+The AngularJS application is defined by ng-app="myApp". The application runs inside the div. The 
+ng-controller = "myCtrl" attribute is an AngularJS directive. It defines a controller. The myCtrl
+function is a JavaScript function. AngularJS will invoke the controller with a $scope object. In 
+AngularJs, $scope is the application object which owns the application variables and functions. The 
+controller creates two properties in the scope called firstName and lastName. The ng-model directives
+bind the input fields to the controller properties.
+
+
+A controller can also have methods which we will see a lot of in our code for TicTacToe: 
+
+```html
+var app = angular.module('myApp', []);
+app.controller('personCtrl', function($scope) {
+	$scope.firstName="John";
+	$scope.lastName="Doe";
+	$scope.fullName = function() {
+		return $scope.firstName + " " + $scope.lastName;
+	};
+});
+```
+
+
+
+
+<br><br> 
+## AngularJS Scope 
+
+Before we start diving into the AngularJS content there is one thing that I wanted to go over because 
+it is a central concept that will show up constantly in the following sections - AngularJS Scope. 
+
+
+In the classic MVC (model/view/controller) model, the scope is the binding part between the HTML (view)
+and the JavaScript (controller). The scope is an object with the available properties and methods that
+is available for both the view and controller. 
+
+When a controller is created in AngularJs, we pass the $scope object as an argument. Properites that 
+are made in the controller can be referenced in the view: 
+
+```html
+<div ng-app="myApp" ng-controller="myCtrl">
+
+<h1>{{carname}}</h1> 
+
+</div> 
+
+<script> 
+var app=angular.module('myApp', []);
+
+app.controller('myCtrl', function($scope) {
+	$scope.carname= "BMW";
+});
+</script>
+```
+
+When adding properties to the $scope object in the controller, the view (HTML) gets access to these 
+properties. 
+
+In the view, we do not use the prefix $scope, we can just refer to a propertyname like {{carname}}
+
+
+<br><br>
+### Understanding the Scope
+
+If we consider an AngularJS application to consist of: 
+
+* View, which is the HTML
+* Model, which is the data available for the current view 
+* Controller, which is the JavaScript function that makes/changes/removes/controls the data 
+
+Then the scope is the Model. The scope is a JavaScript object with properties and methods, which are
+available for both the view and the controller.
+
+
+It is important to know which scope we are dealing with at anytime - for larger applications, there can
+be sections in the HTML DOM which can only access certain scopes. 
+
+
+<br><br>
+### Root Scope
+
+All applications have a $rootScope which is the scope created on the HTML element that contains the 
+ng-app directive 
+
+The rootScope is available in the entire application. If a variable has the same name in the current
+scope and the rootScope, the application uses the one in the current scope.
+
+
+
+
+
+
+
+<br><br> 
+## AngularJS Services
+
+
+
+
+
+
 <br><br> 
 ## The Player Screen 
 
