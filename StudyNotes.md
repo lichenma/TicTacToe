@@ -475,6 +475,7 @@ UserDetailsServiceImpl.
 
 
 <br><br>
+**ContextUser** class
 ```java 
 public class ContextUser extends org.springframework.security.core.userdetails.User {
 	
@@ -509,7 +510,84 @@ concerned if the account has expired or if the app is locked because it is being
 
 
 <br><br> 
+**UserDetailsServiceImpl** class
 ```java 
+@Component
+public class UserDetailsServiceImpl implements UserDetailsService {
+	
+	private final PlayerRepository playerRepository; 
+
+	@Autowired
+	public UserDetailsServiceImpl(PlayerRepository playerRepository) {
+		this.playerRepository=playerRepository;
+	}
+
+	@Override
+	@Transactional 
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		
+		checkNotNull(username);
+
+		if(isEmpty(username)) {
+			throw new UsernameNotFoundException("Username cannot be empty");
+		}
+
+		Player player=playerRepository.findOneByUserName(username);
+
+		if(player==null){
+			throw new UsernameNotFoundException("Player " + username + " doesn't exist");
+		}
+		return new ContextUser(player);
+	}
+}
+```
+
+The UserDetialsServiceImpl, shows how the security service queries the player repository and determines
+that a player profile exists. 
+
+
+
+
+<br><br> 
+**SecurityConfig** class
+```java 
+@Configuration 
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter{
+	
+	@Autowired
+	private PlayerRepository playerRepository; 
+
+	@Autowired 
+	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+		auth
+			.userDetailsService(new UserDetailsServiceImpl(playerRepository))
+			.passwordEncoder(new BCryptPasswordEncoder());
+	}
+
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http
+			.authorizeRequests()
+				.anyRequest().authenticated()
+			.and()
+				.formLogin()
+				 .usernameParameter("username")
+				 .passwordParameter("password")
+			.and()
+				.httpBasic()
+			.and()
+				.csrf().disable();
+	}
+}
+```
+
+This is the SecurityConfig class which is found in the config package. It ensures that only 
+authenticated users can access application pages. The SecurityConfig class is annotated with 
+@EnableWebSecurity to enable Spring Security's web security support. The class also extends 
+WebSecurityConfigurerAdapter and overrides a couple of methods to set some specifics for web security
+configuration. 
+
 
 
 
