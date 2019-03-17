@@ -628,11 +628,68 @@ public interface PlayerRepository extends CrudRepository<Player, Long> {
 ## The Player Screen 
 
 
-We are
+We have finished with user authentication and can move on to the actual game. After loggin in, the 
+player is redirected to the /player/panel endpoint. In this page they can: 
+
+1. Create a new game and play against an AI opponent (the 'COMPUTER')
+2. Create a new game and play against a human 
+3. Join a two-player game 
+4. Resume a game 
+
+
+From the drop-down menu, the user can choose one of two Game types. The 'COMPUTER' value will create
+a game with the 'COMPUTER' type, in which the application is the second player. The second type is 
+'COMPETITION', in which two human opponents play against each other. 
+
+
+The next field we have is **Play as**. This lets the player choose which piece they will use (X or O).
+After clicking the New Game button, the selected values are sent as a JSON object in the POST request
+to the **/game/create** endpoint. 
 
 
 
+The appropriate sequence of actions are visualized in the diagram below: 
 
+
+1. POST/game/create {gameType:"COMPUTER", piece: "X"}
+
+2. Get the logged player from the session {gameId: "..." Logged Player}
+
+3. Save the new game in the database 
+
+4. Save in the session the id of the created game {httpSession object}
+
+5. SpringBoot returns in the response JSON Object
+
+6. Angular redirects user to the page with newly created game 
+
+
+```
+
+				      httpSession Object
+					
+					^	    ^
+					|	    |
+				    2.	|	    |   4.
+		       			v           v  			3.
+		       1.
+User Computer    -------------->                              <--------------------->  Database 
+				     Spring Boot Application
+     ^
+  6. |		 <--------------
+     |			5.
+
+```
+
+
+Let's pick up the action with moving to the Angular application. In gameModule.js, we have the
+controller (newGameController) where the logic for creating a new game is located. 
+
+
+
+```javascript
+
+```
 
 
 
