@@ -604,7 +604,31 @@ and is employed throughout the framework as a user DAO.
 
 
 
+<br><br>
+## Respositories
 
+
+The repositories for GameRepository, MoveRepository and PlayerRespository (Used earlier in the security
+configurations) are located in the repository package. They are all incredibly similar and extend the
+CrudRepository<>. Here is the implementation for PlayerRepository: 
+
+```java 
+@Repository
+public interface PlayerRepository extends CrudRepository<Player, Long> {
+	
+	Player findOneByUserName(String userName);
+}
+```
+
+
+
+
+
+<br><br> 
+## The Player Screen 
+
+
+We are
 
 
 
