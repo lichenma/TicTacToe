@@ -542,8 +542,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 }
 ```
 
-The UserDetialsServiceImpl, shows how the security service queries the player repository and determines
-that a player profile exists. 
+The UserDetailsServiceImpl, shows how the security service queries the player repository and determines
+that a player profile exists. The UserDetailsService interface loads user-specific data and is employed
+throughout the framework as a user DAO.
 
 
 
@@ -587,6 +588,19 @@ authenticated users can access application pages. The SecurityConfig class is an
 @EnableWebSecurity to enable Spring Security's web security support. The class also extends 
 WebSecurityConfigurerAdapter and overrides a couple of methods to set some specifics for web security
 configuration. 
+
+
+
+In particular focus on the method configure(HttpSecurity http). We will override this method to 
+configure Spring's HttpSecurity. This class tells Spring: 
+
+* any request URL will require an authenticated User 
+* the specifics of the form-support-based authentication, which will generate the default login page
+
+As mentioned above and seen in this class, the interface UserDetailsService loads user-specific data
+and is employed throughout the framework as a user DAO. 
+
+
 
 
 
