@@ -141,7 +141,18 @@ gameModule.controller('gameController', ['$rootScope', '$routeParams', '$scope',
 
                 // Second player is a user
                 else {
-                    
+                    console.log(' another player\'s move');
                 }
+            }
+
+            function checkIfBoardCellAvailable(boardRow, boardColumn) {
+
+                for (var i=0; i<scope.movesInGame.length; i++) {
+                    var move= scope.movesInGame[i];
+                    if (move.boardColumn==boardColumn &&move.boardRow==boardRow) {
+                        return false;
+                    }
+                }
+                return true;
             }
     }])
