@@ -158,8 +158,60 @@ gameModule.controller('gameController', ['$rootScope', '$routeParams', '$scope',
 
             scope.rows = [
                 [
-                    {'id': '11', 'letter': '', 'class': 'box'}
+                    {'id': '11', 'letter': '', 'class': 'box'},
+                    {'id': '12', 'letter': '', 'class': 'box'},
+                    {'id': '13', 'letter': '', 'class': 'box'}
+                ],
+                [
+                    {'id': '21', 'letter': '', 'class': 'box'},
+                    {'id': '22', 'letter': '', 'class': 'box'},
+                    {'id': '23', 'letter': '', 'class': 'box'}
+                ],
+                [
+                    {'id': '31', 'letter': '', 'class': 'box'},
+                    {'id': '32', 'letter': '', 'class': 'box'},
+                    {'id': '33', 'letter': '', 'class': 'box'}
                 ]
-            ]
+            ];
 
-    }])
+            angular.forEach(scope.rows, function (row) {
+                row[0].letter = row[1].letter = row[2].letter = '';
+                row[0].class = row[1].class = row[2].class = 'box';
+            });
+
+            scope.markPlayerMove=function (column) {
+                checkPlayerTurn().success(function () {
+
+                    var boardRow = parseInt(column.id.charAt(0));
+                    var boardColumn = parseInt(column.id.charAt(1));
+                    var params = {'boardRow':boardRow,'boardColumn':boardColumn}
+
+                    if (checkIfBoardCellAvailable(boardRow,boardColumn)==true){
+                        // if player's turn
+                        if (scope.playerTurn==true) {
+
+                            http.post("/move/create",params, {
+                                headers: {
+                                    'Content-Type': 'application/json; charset=UTF-8'
+                                }
+                            }).success(function () {
+
+                                getMoveHistory().success(function () {
+
+                                    var gameStatus=scope.movesInGame[scope.movesInGame.length-1].gameStatus;
+                                    if (gameStatus=='IN_PROGRESS') {
+                                        getNextMove();
+                                    }
+                                    else {
+                                        alert(gameStatus)
+                                    }
+                                });
+                            }).error(function (data, status, headers, config) {
+                                scope.errorMessage = "Can't send the move"
+                            });
+                        }
+                    }
+                });
+            };
+
+    }]);

@@ -884,8 +884,263 @@ controller (newGameController) where the logic for creating a new game is locate
 
 
 ```javascript
+var gameModule=angular.module('gameModule',[]);
 
+gameModule.controller('newGameController', ['$rootScope','$scope', '$http', '$location',
+    function (rootScope, scope, http, location) {
+
+        rootScope.gameId = null;
+        scope.newGameData = null;
+
+        scope.newGameOptions = {
+            availablePieces: [
+                {name: 'X'},
+                {name: 'O'}
+            ],
+            selectedPiece: {name: 'O'},
+            availableGameTypes: [
+                {name: 'COMPETITION'},
+                {name: 'COMPUTER'}
+            ],
+            selectedBoardDimension: {name: 'COMPUTER'}
+        };
+
+        scope.createNewGame = function () {
+
+            var data = scope.newGameData;
+            var params = JSON.stringify(data);
+
+            http.post("/game/create", params, {
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8'
+                }
+            }).success(function (data, status, headers, config) {
+                rootScope.gameId = data.id;
+                location.path('/game/' + rootScope.gameId);
+            }).error(function (data, status, headers, config) {
+                location.path('/player/panel');
+            });
+        }
+
+    }]);
+
+gameModule.controller('gamesToJoinController', ['$scope', '$http', '$location',
+    function (scope, http, location) {
+
+        scope.gamesToJoin=[];
+
+        http.get('/game/list').success(function (data) {
+            scope.gamesToJoin=data;
+        }).error(function (data, status, headers, config) {
+            location.path('/player/panel');
+        });
+
+        scope.joinGame=function (id) {
+            var params={"id":id}
+
+            http.post('/game/join', params, {
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8'
+                }
+            }).success(function (data) {
+                location.path('/game/'+data.id);
+            }).error(function (data, status, headers, config) {
+                location.path('/player/panel');
+            });
+        }
+    }]);
+
+gameModule.controller('playerGamesController', ['$scope', '$http', '$location', '$routeParams',
+    function (scope, http, location, routeParams) {
+
+        scope.playerGames= [];
+
+        http.get('/game/player/list').success(function (data) {
+            scope.playerGames = data;
+        }).error(function (data, status, headers, config) {
+            location.path('/player/panel');
+        });
+
+        scope.loadGame = function (id) {
+            console.log(id);
+            location.path('/game/'+id);
+        }
+    }]);
+
+gameModule.controller('gameController', ['$rootScope', '$routeParams', '$scope', '$http',
+    function (rootScope, routeParams, scope, http) {
+
+        var gameStatus;
+        getInitialData()
+
+            function getInitialData() {
+                http.get('/game/'+routeParams.id).success(function (data) {
+                    scope.gameProperties= data;
+                    gameStatus= scope.gameProperties.gameStatus;
+                    getMoveHistory();
+                }).error(function (data, status, headers, config) {
+                    scope.errorMessage="Failed to load game properties";
+                });
+            }
+
+            function getMoveHistory() {
+                scope.movesInGame= [];
+
+                return http.get('/move/list').success(function (data) {
+                    scope.movesInGame=data;
+                    scope.playerMoves=[];
+
+                    //fill the board with positions from the retrieved moves
+                    angular.forEach(scope.movesInGame, function (move) {
+                        scope.rows[move.boardRow-1][move.boardColumn-1].letter = move.playerPieceCode;
+                    });
+                }).error(function (data, status, headers, config) {
+                    scope.errorMessage= "Failed to load moves in game"
+                });
+            }
+
+            function checkPlayerTurn() {
+                return http.get('/move/turn').success(function (data) {
+                    scope.playerTurn=data;
+                }).error(function (data, status, headers, config) {
+                    scope.errorMessage="Failed to get the player turn"
+                });
+            }
+
+            function getNextMove() {
+                scope.nextMoveData=[]
+
+                // Computer is a second player
+                if(!scope.gameProperties.secondPlayer) {
+                    http.get("/move/autocreate").success(function (data, status, headers, config) {
+                        scope.nextMoveData= data;
+                        getMoveHistory().success(function () {
+                            var gameStatus = scope.movesInGame[scope.movesInGame.length-1].gameStatus;
+                            if (gameStatus!='IN_PROGRESS') {
+                                alert(gameStatus)
+                            }
+                        });
+                    }).error(function (data, status, headers, config) {
+                        scope.errorMessage="Can't send move"
+                    });
+                }
+
+                // Second player is a user
+                else {
+                    console.log(' another player\'s move');
+                }
+            }
+
+            function checkIfBoardCellAvailable(boardRow, boardColumn) {
+
+                for (var i=0; i<scope.movesInGame.length; i++) {
+                    var move= scope.movesInGame[i];
+                    if (move.boardColumn==boardColumn &&move.boardRow==boardRow) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            scope.rows = [
+                [
+                    {'id': '11', 'letter': '', 'class': 'box'},
+                    {'id': '12', 'letter': '', 'class': 'box'},
+                    {'id': '13', 'letter': '', 'class': 'box'}
+                ],
+                [
+                    {'id': '21', 'letter': '', 'class': 'box'},
+                    {'id': '22', 'letter': '', 'class': 'box'},
+                    {'id': '23', 'letter': '', 'class': 'box'}
+                ],
+                [
+                    {'id': '31', 'letter': '', 'class': 'box'},
+                    {'id': '32', 'letter': '', 'class': 'box'},
+                    {'id': '33', 'letter': '', 'class': 'box'}
+                ]
+            ];
+
+            angular.forEach(scope.rows, function (row) {
+                row[0].letter = row[1].letter = row[2].letter = '';
+                row[0].class = row[1].class = row[2].class = 'box';
+            });
+
+            scope.markPlayerMove=function (column) {
+                checkPlayerTurn().success(function () {
+
+                    var boardRow = parseInt(column.id.charAt(0));
+                    var boardColumn = parseInt(column.id.charAt(1));
+                    var params = {'boardRow':boardRow,'boardColumn':boardColumn}
+
+                    if (checkIfBoardCellAvailable(boardRow,boardColumn)==true){
+                        // if player's turn
+                        if (scope.playerTurn==true) {
+
+                            http.post("/move/create",params, {
+                                headers: {
+                                    'Content-Type': 'application/json; charset=UTF-8'
+                                }
+                            }).success(function () {
+
+                                getMoveHistory().success(function () {
+
+                                    var gameStatus=scope.movesInGame[scope.movesInGame.length-1].gameStatus;
+                                    if (gameStatus=='IN_PROGRESS') {
+                                        getNextMove();
+                                    }
+                                    else {
+                                        alert(gameStatus)
+                                    }
+                                });
+                            }).error(function (data, status, headers, config) {
+                                scope.errorMessage = "Can't send the move"
+                            });
+                        }
+                    }
+                });
+            };
+
+    }]);
 ```
+
+
+
+The whole code is presented above in case you want to refer to it. In particular we are going to 
+examine the createNewGame() function. It is created in the scope (object containing model data) which
+joins the controller with the views - we covered this in the previous section. 
+
+
+To start the game a POST/game/create request is made by Angular and here is the function that sends the
+POST request: 
+
+
+```javascript
+scope.createNewGame = function() {
+	
+	var data = scope.newGameData;
+	var params = JSON.stringify(data);
+
+	http.post("/game/create", params, {
+		
+		headers: {
+			'Content-Type': 'application/json; charset=UTF-8'
+		}
+	}).success(function (data, status, headers, config) {
+		rootScope.gameId = data.id;
+		location.path('/game/' + rootScope.gameId);
+	}).error(function(data, status, headers, config) {
+		location.path('/player/panel');
+	});
+}
+```
+
+
+
+
+Now once the request is sent by Angular it is handled by the Spring Boot GameController class. In this
+particular case createNewGame() is responsible. This is the code: 
+
+
 
 
 
