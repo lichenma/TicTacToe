@@ -6,6 +6,7 @@ import com.webservice.tictactoe.enums.GameType;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.Id;
 import java.util.List;
 
 @Repository
