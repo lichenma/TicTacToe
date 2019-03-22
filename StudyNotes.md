@@ -1141,8 +1141,19 @@ Now once the request is sent by Angular it is handled by the Spring Boot GameCon
 particular case createNewGame() is responsible. This is the code: 
 
 
+```java 
+@RequestMapping(value = "/create")
+public Game createNewGame(@RequestBody GameDTO gameDTO) {
+	
+	Game game = gameService.createNewGame(playerService.getLoggedUser(), gameDTO);
+	httpSession.setAttribute("gameId", game.getId());
 
+	return game;
+}
+```
 
+The value placed in the `@RequestMapping` annotation maps the web reqeust to the appropriate function
+. The request body will be mapped to `GameDTO` by the `@RequestBody` annotation. 
 
 
 
