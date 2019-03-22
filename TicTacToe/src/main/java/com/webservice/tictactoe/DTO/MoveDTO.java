@@ -17,7 +17,7 @@ public class MoveDTO {
 
     private int boardColumn;
     private int boardRow;
-    private Date;
+    private Date created;
     private String userName;
     private GameStatus gameStatus;
     private Piece playerPieceCode;

@@ -7,6 +7,7 @@ import org.hibernate.collection.internal.PersistentBag;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 
@@ -24,7 +25,7 @@ public class GameLogic {
      */
     static boolean isWinner(List<Position> positions) {
 
-        return  getWinningPositions().steam().
+        return  getWinningPositions().stream().anyMatch(positions::containsAll);
     }
 
     /*
@@ -66,6 +67,24 @@ public class GameLogic {
 
 
     /*
-     * @param numberOfFirstPlayer
+     * @param numberOfFirstPlayerMovesInGame
+     * @param numberOfSecondPlayerMovesInGame
+     * @return true or false depending on the count of the player's moves
      */
+    static boolean playerTurn(int numberOfFirstPlayerMovesInGame, int numberOfSecondPlayerMovesInGame) {
+        return numberOfFirstPlayerMovesInGame == numberOfSecondPlayerMovesInGame || numberOfFirstPlayerMovesInGame == 0;
+    }
+
+    static boolean boardIsFull(List<Position> takenPositions) {
+        return takenPositions.size() == 9;
+    }
+
+    // GENERATE COMPUTER'S MOVES
+    static List<Position> getOpenPositions(List<Position> takenPositions) {
+        return getAllPositions().stream().filter(p -> !takenPositions.contains(p)).collect(Collectors.toList());
+    }
+
+    static Position nextAutoMove(List<Position> takenPositions) {
+        return getOpenPositions(takenPositions).get(0);
+    }
 }
