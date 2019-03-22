@@ -1186,7 +1186,27 @@ public class GameDTO {
 
 
 
-For creating the object, we use the 'createNewGame() function from the service package. This takes two
-arguments: the logged user object, and the gameDTO object. 
+For creating the object, we use the 'createNewGame()' function from the service package. This takes two
+arguments: the logged user object, and the gameDTO object. After creating the game, a game ID is saved
+in the session. 
+
+
+```java 
+public Game createNewGame(Player player, GameDTO gameDTO) {
+	
+	Game game = new Game(); 
+	game.setFirstPlayer(player);
+	game.setGameType(gameDTO.getGameType());
+	game.setFirstPlayerPieceCode(gameDTO.getPiece());
+	game.setGameStatus(gameDTO.getGameType() == GameType.COMPUTER ? 
+}
+
+
+
+
+
+
+
+
 
 
