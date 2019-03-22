@@ -8,10 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -46,6 +43,24 @@ public class GameController {
     public List<Game> getGamesToJoin() {
         return gameService.getGamesToJoin(playerService.getLoggedUser());
     }
-    
+
+    @RequestMapping(value = "/join", method = RequestMethod.POST)
+    public Game joinGame(@RequestBody GameDTO gameDTO) {
+        Game game = gameService.joinGame(playerService.getLoggedUser(),gameDTO);
+        return game;
+    }
+
+    @RequestMapping(value = "/player/list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Game> getPlayerGames() {
+        return gameService.getPlayerGames(playerService.getLoggedUser());
+    }
+
+    @RequestMapping(value = "/{id}")
+    public Game getGameProperties(@PathVariable Long id) {
+
+        httpSession.setAttribute("gameId", id);
+
+        return gameService.getGame(id);
+    }
 
 }
