@@ -14,15 +14,16 @@ To be updated
 Ideally the most recent java and maven versions, I used the following when building and testing the webpage.
 
 ```
-Apache Maven 3.6.0  Java version 1.8.0_192
+Gradle 5.2.1  Java version 1.8.0_192
 ```
 
 ## Built With
 
 * [Spring](https://spring.io/) - Application Framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
+* [Gradle](https://gradle.org/) - Dependency Management
 
 
 ## Acknowledgments
 
 * Vertabello Tutorial
+* W3schools Documentation
