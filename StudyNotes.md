@@ -1161,8 +1161,8 @@ public Game createNewGame(@RequestBody GameDTO gameDTO) {
 
 
 The value placed in the `@RequestMapping` annotation maps the web reqeust to the appropriate function
-. The request body will be mapped to `GameDTO` by the `@RequestBody` annotation. 'GameDTO' can 
-appropriately request two fields 'GameType' and 'Piece'. Here is the code for GameDTO, notice that 
+. The request body will be mapped to `GameDTO` by the `@RequestBody` annotation. `GameDTO` can 
+appropriately request two fields `GameType` and `Piece`. Here is the code for GameDTO, notice that 
 there are getters and setters for gameType and piece: 
 
 
@@ -1186,7 +1186,7 @@ public class GameDTO {
 
 
 
-For creating the object, we use the 'createNewGame()' function from the service package. This takes two
+For creating the object, we use the `createNewGame()` function from the service package. This takes two
 arguments: the logged user object, and the gameDTO object. After creating the game, a game ID is saved
 in the session. 
 
@@ -1220,7 +1220,7 @@ new game page.
 
 
 On the right side of the screen, we can see games created by other users. To get the list of those 
-games, Anguar sends a GET request to the '/game/list' endpoint. The user can join a game by clicking
+games, Anguar sends a GET request to the `/game/list` endpoint. The user can join a game by clicking
 the Join button 
 
 
