@@ -1198,12 +1198,46 @@ public Game createNewGame(Player player, GameDTO gameDTO) {
 	game.setFirstPlayer(player);
 	game.setGameType(gameDTO.getGameType());
 	game.setFirstPlayerPieceCode(gameDTO.getPiece());
-	game.setGameStatus(gameDTO.getGameType() == GameType.COMPUTER ? 
+	game.setGameStatus(gameDTO.getGameType() == GameType.COMPUTER ? GameStatus.IN_PROGRESS:
+		GameStatus.WAITS_FOR_PLAYER);
+	
+	game.setCreated(new Date());
+	gameRepository.save(game);
+
+	return game;
 }
+```
+
+In the response, the Angular application receives the new game's object and redirects the user to a 
+new game page. 
 
 
 
 
+
+
+## Joining a Two-Player Game 
+
+
+On the right side of the screen, we can see games created by other users. To get the list of those 
+games, Anguar sends a GET request to the '/game/list' endpoint. The user can join a game by clicking
+the Join button 
+
+
+
+```
+	Join existing game 
+
+	Started player 		Game status 		Created 	
+
+	Lichen 			WAITS_FOR_PLAYER	03-23-2019 2:03:30	Join 
+
+		^								  ^
+		|								  |
+		|								  |
+
+	    GET /game/list						    POST /game/join
+```
 
 
 
