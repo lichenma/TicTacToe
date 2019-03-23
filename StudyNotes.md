@@ -1241,6 +1241,17 @@ the Join button
 
 
 
+Once again, let's take a look at Angular's role. The Angular application sends the HTTP GET request to
+the `/game/list` endpoint. The code for handling this functionality is below: 
+
+
+```
+
+
+
+
+
+
 
 
 
