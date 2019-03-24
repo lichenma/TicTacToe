@@ -1321,6 +1321,7 @@ http.get('/game/player/list').success(function (data) {
 
 The Java function that handles this request is as follows: 
 
+
 ```java 
 @RequestMapping(value = "/player/list", produces = MediaType.APPLICATION_JSON_VALUE)
 public List<Game> getPlayerGames() {
@@ -1329,7 +1330,26 @@ public List<Game> getPlayerGames() {
 }
 ```
 
-The `getPlayerGames()` function takes only one argument, which is the object of the currently 
+The `getPlayerGames()` function takes only one argument, which is the object of the currently logged 
+user. This is retrieved from the session. Let's move to game services and look at this function: 
+
+
+```java 
+public List<Game> getPlayerGames(Player player) {
+	return gamedRepository.findByGameStatus(
+		GameStatus.IN_PROGRESS).stream().filter(game -> game.getFirstPlayer() == player)
+		.collect(Collectors.toList());
+}
+```
+
+The function `findByGameStatus()` returns games with the status `IN_PROGRESS`. The result contains all
+users' games, filtered by the player's object. If the `firstPlayer` object of the game is the same as 
+the current player, the game is added to the list. The list of filtered game is returned to the Angular
+and displayed to the user. 
+
+
+
+## Playing the Game 
 
 
 
