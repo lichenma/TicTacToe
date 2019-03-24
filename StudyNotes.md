@@ -1245,9 +1245,25 @@ Once again, let's take a look at Angular's role. The Angular application sends t
 the `/game/list` endpoint. The code for handling this functionality is below: 
 
 
+
+```javascript
+http.get('/game/list').success(function (data) {
+	scope.gamesToJoin = data; 
+}).error(function (data, status, headers, config) {
+	location.path('/player/panel');
+});
 ```
 
 
+
+The Spring Boot function that handles the `/game/list` endpoint returns a list of game. This is what 
+the code looks like: 
+
+```java
+@RequestMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
+public List<Game> getGamesToJoin() {
+	
+}
 
 
 
