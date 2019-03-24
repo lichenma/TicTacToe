@@ -1351,5 +1351,16 @@ and displayed to the user.
 
 ## Playing the Game 
 
+After a new game is created, the user sees a fresh page. On the left side, there is an empty board, 
+the right side is dedicated to moves performed during the game. 
+
+
+The board is generated from a defined array of rows. Each row and cell has a CSS class set.
+
+
+Below is the HTML that corresponds to the board you see above. The individual cells are generated from
+the rows array: 
+
+```html
 
 
