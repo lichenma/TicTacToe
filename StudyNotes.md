@@ -1494,7 +1494,62 @@ that displays the game status and we end the game. Here's the relevant code:
 
 
 ```javascript
+scope.markPlayerMove = function (column) {
+	checkPlayerTurn().success(function () {
+		
+		var boardRow = parseInt(column.id.charAt(0));
+		var boardColumn = parseInt(column.id.charAt(1));
+		var params = {'boardRow': boardRow, 'boardColumn': boardColumn}
 
+		if (checkIfBoardCellAvailable(boardRow, boardColumn) == true) {
+			
+			//if player has a turn 
+			if (scope.playerTurn == true) {
+				
+				http.post("/move/create", params, {
+					headers: { 
+						'Content-Type' : 'application/json; charset = UTF-8'
+					}
+				}).success(function () {
+					getMoveHistory.succes(function () {
+						var gameStatus = scope.movesInGame[scope.movesInGame.length - 1].gameStatus; 
+						if (gameStatus == 'IN_PROGRESS') {
+							getNextMove();
+						} else {
+							alert(gameStatus)
+						}
+					});
+
+				}).error(function (data, status, headers, config) {
+					scope.errorMessage = "Can't send the move" 
+				});
+			}
+		}
+	});
+};
+```
+
+The request with the data is sent. What happens next? The SpringBoot application receives the JSON 
+object with the cell details (board row and board column). The request body is mapped to the 
+`createMoveDTO` object. The `CreateMoveDTO` class looks as follows: 
+
+```java 
+@Getter 
+@Setter 
+@AllArgsConstructor
+@NoArgsConstructor
+public class CreateMoveDTO {
+	
+	@NotNull
+	int boardRow;
+
+	@NotNull
+	int boardColumn; 
+}
+```
+
+
+Let's consider the function presented below. In it, we invoke the `createMove()` function from the 
 
 
 
