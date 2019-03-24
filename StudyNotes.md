@@ -1263,9 +1263,27 @@ the code looks like:
 @RequestMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
 public List<Game> getGamesToJoin() {
 	
+	return gameService.getGamesToJoin(playerService.getLoggedUser());
 }
+```
 
 
+Let's now take a looks at the `GameService` class: 
+
+```java 
+public List<Game> getGamesToJoin(Player player) {
+	
+	return gameRepository.findByGameTypeAndGameStatus(GameType.COMPETITION, 
+		GameStatus.WAITS_FOR_PLAYER).stream().filter(game -> game.getFirstPlayer() != player)
+		.collect(Collectors.toList());
+}
+```
+
+
+The function `findByGameTypeAndGameStatus()` return a list of games that are of the `COMPETITION` type
+and have the `WAITS_FOR_PLAYER` status. Unfortunately, this list also contains games created by the 
+current user. So each of the games is filtered in the stream and the appropriate objects collected in
+a separate list. 
 
 
 
