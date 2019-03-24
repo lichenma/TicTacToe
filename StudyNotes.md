@@ -1283,7 +1283,29 @@ public List<Game> getGamesToJoin(Player player) {
 The function `findByGameTypeAndGameStatus()` return a list of games that are of the `COMPETITION` type
 and have the `WAITS_FOR_PLAYER` status. Unfortunately, this list also contains games created by the 
 current user. So each of the games is filtered in the stream and the appropriate objects collected in
-a separate list. 
+a separate list. If the object of `firstPlayer` in the processed game object differs from the object of
+the currently logged player, that game is added to the list. 
+
+
+
+## Resume a Game 
+
+
+
+```
+	My games 
+
+	Started player 	   Second Player	Game status 		Created 	
+
+	Lichen 		   COMPUTER		WAITS_FOR_PLAYER	03-23-2019 2:03   Load Game 
+
+		^								  	      ^
+		|								 	      |
+		|								  	      |
+
+	    GET /game/player/list					   	     GET /game/ + id
+```
+
 
 
 
