@@ -1362,5 +1362,140 @@ Below is the HTML that corresponds to the board you see above. The individual ce
 the rows array: 
 
 ```html
+<div class="tableContainer">
+	<div class="gametable">
+		<div ng-repeat="row in rows" class="tablerow">
+			<div id="{{column.id}}" class="{{column.class}}" ng-repeat="column in row">
+				<div ng-click="markPlayerMove(column)" class="boxContent{{column.letter}}"></code>
+			</code>
+		</code>
+	</code>
+</code>
+```
+
+This is the content of the array that stores the rows' initial values. At the beginning, each letter 
+has an empty value. After marking the move, the value will change to 'X' or 'O' and a different CSS 
+will be used for that particular set. 
+
+
+```javascript
+scope.rows = [ 
+	[
+		{'id': '11', 'letter': '', 'class': 'box'},
+		{'id': '12', 'letter': '', 'class': 'box'},
+		{'id': '13', 'letter': '', 'class': 'box'}
+	],
+	[
+		{'id': '21', 'letter': '', 'class': 'box'},
+		{'id': '22', 'letter': '', 'class': 'box'},
+		{'id': '23', 'letter': '', 'class': 'box'}
+	],
+	[
+		{'id': '31', 'letter': '', 'class': 'box'},
+		{'id': '32', 'letter': '', 'class': 'box'},
+		{'id': '33', 'letter': '', 'class': 'box'}
+	]
+];
+
+
+angular.forEach(scope.rows, function(row) {
+	row[0].letter = row[1].letter = row[2].letter = '';
+	row[0].class = row[1].class = row[2].class = 'box';
+});
+```
+
+<br><br> 
+
+We now have generated the board. Next, we want to mark a move. Let's take a look at the sequence of 
+actions involved in this step. 
+
+
+
+```
+            ---------------     
+	    |             |			Player wants to mark move here: 
+	    |             |			
+	    |             |      <---------     1. Check if cell is available
+	    |             |                     2. Check if player's turn to make move 
+	    |             |                     3. If it is the player's turn and the cell is available
+	    ---------------			   the cell send the details 
+
+	                                           {boardRow: 1, boardColumn: 1} 
+						   
+						   In the POST request to the move/create endpoint
+
+						4. The move is saved and repainted on the board 
+
+```
+
+Once the user clicks on a particular cell, two important actions happen in the Angular application. 
+
+
+
+
+
+### 1. Check if the Board Cell is Available 
+
+After each move, Angular sends a GET request to the `/move/list` endpoing. This retrieves the list of 
+moves for that game. Angular then saves the JSON object in the `movesInGame` variable. These values 
+appear on the right side of the game screen and also are used for checking cell availability and game 
+status. To check if a move is valid, we're simply looking for matching row and column values in 
+`movesInGame`: 
+
+```javascript
+function checkIfBoardCellAvailable(boardRow, boardColumn) {
+	
+	for(var i=0; i<scope.movesInGame.length; i++) {
+		
+		var move = scope.movesInGame[i];
+		if (move.boardColumn == boardColumn && move.boardRow == boardRow) {
+			
+			return false;
+		}
+	}
+
+	return true;
+}
+```
+
+
+		
+### 2. Check if it is the Player's Turn 
+
+The Angular application sends a GET request to the `/move/turn` endpoint along with the JSON object
+that contains the column and row of the target cell. In response, Angular receives a boolean value: 
+
+* True 	: If it is the player's turn 
+* False	: If it is not 
+
+The code that handles this task is: 
+
+```javascript 
+function checkPlayerTurn() {
+
+	http.get('/move/turn').success(function(data) {
+		scope.playerTurn = data; 
+	}).error(function(data, status, headers, config) {
+		scope.errorMessage = "Failed to get the player turn"
+	});
+}
+```
+
+
+
+
+### 3. Mark the Move 
+
+Now we can finally create the move. The Angular application sends the JSON object with the board's row
+and column in the POST reqeust to the `move/create` endpoint. After the move is created, the 
+**Move history** section is updated. If the game is still IN\_PROGRESS, we allow another move. If the 
+status is different ('FIRST\_PLAYER\_WON', 'SECOND\_PLAYER\_WON', 'TIE'), we show the user an alert 
+that displays the game status and we end the game. Here's the relevant code: 
+
+
+```javascript
+
+
+
 
 
