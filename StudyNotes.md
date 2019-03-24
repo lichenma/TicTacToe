@@ -1307,7 +1307,29 @@ the currently logged player, that game is added to the list.
 ```
 
 
+As with the previous action, Angular again sends a request for the player's games: 
 
+
+```javascript
+http.get('/game/player/list').success(function (data) {
+	scope.playerGames = data;
+}).error(function (data, status, headers, config) {
+	location.path('/player/panel');
+});
+```
+
+
+The Java function that handles this request is as follows: 
+
+```java 
+@RequestMapping(value = "/player/list", produces = MediaType.APPLICATION_JSON_VALUE)
+public List<Game> getPlayerGames() {
+	
+	return gameService.getPlayerGames(playerService.getLoggedUser());
+}
+```
+
+The `getPlayerGames()` function takes only one argument, which is the object of the currently 
 
 
 
