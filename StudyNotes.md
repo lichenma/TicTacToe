@@ -1279,7 +1279,7 @@ getSomeData('someValue')
 });
 ```
 
-
+<br><br>
 ## Error Handling with Async/Await
 
 Inside the scope of an async function you can use try/catch for error handling and even though you 
@@ -1297,6 +1297,51 @@ async function getSomeData(value) {
 	}
 }
 ```
+
+
+We mentioned the promise chain with only one .catch(...) at the end, and the same goes for async/await
+and error handling with try/catch. You only need to surround the code in the "first" async function 
+with try catch. That function can await one or more async functions which in return does their own 
+asynchronous calls by awaiting one or more other async functions etc. 
+
+
+The following is valid for handling errors in such a case: 
+
+```javascript
+async function fetchTheFirstData(value) {
+	return await get("someUrl", value);
+}
+
+async function fetchTheSecondData(value) {
+	return await getFromDatabase(value);
+}
+
+async function getSomeData(value) {
+	try {
+		const firstResult = await fetchTheFirstData(value);
+		const result = await fetchThSecondData(firstResult.someValue);
+		return result;
+	} 
+	catch (error) {
+		//Every error thrown in the whole "awaitable" chain will end up here now
+	}
+}
+```
+
+
+
+
+<br><br>
+## An Important Consideration Regarding Async/Await
+
+Async/await may make your asynchronous calls look more synchronous but it is still executed the same 
+way as if it were using a callback or promise based API. The asynchronous I/O operations will still
+be processed in parallel and the code handling the responses in the async functions will not be 
+executed until that asynchronous operation has a result. Also, even though you are using async/await
+you have to sooner or later resolve it as a Promise in the top level of your problem. This is because
+async and await are just syntactical sugar for automatically creating, returning and resolving 
+Promises. 
+
 
 
 
