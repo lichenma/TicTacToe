@@ -1878,7 +1878,7 @@ the current player, the game is added to the list. The list of filtered game is 
 and displayed to the user. 
 
 
-
+<br><br>
 ## Playing the Game 
 
 After a new game is created, the user sees a fresh page. On the left side, there is an empty board, 
@@ -1963,7 +1963,7 @@ Once the user clicks on a particular cell, two important actions happen in the A
 
 
 
-
+<br>
 ### 1. Check if the Board Cell is Available 
 
 After each move, Angular sends a GET request to the `/move/list` endpoing. This retrieves the list of 
@@ -1989,7 +1989,7 @@ function checkIfBoardCellAvailable(boardRow, boardColumn) {
 ```
 
 
-		
+<br>		
 ### 2. Check if it is the Player's Turn 
 
 The Angular application sends a GET request to the `/move/turn` endpoint along with the JSON object
@@ -2013,7 +2013,7 @@ function checkPlayerTurn() {
 
 
 
-
+<br>
 ### 3. Mark the Move 
 
 Now we can finally create the move. The Angular application sends the JSON object with the board's row
@@ -2217,6 +2217,7 @@ public List<MoveDTO> getMovesInGame(Game game) {
 ```
 
 
+<br><br>
 ## Second Player Moves 
 
 What happens next? Before we perform any other actions, we need to check the status of the game. If the
@@ -2224,7 +2225,98 @@ status is still `IN_PROGRESS`, a move can be made. In games played against 'COMP
 decides the next move. In a two-player 'COMPETITION' game, the second player to join the game decides
 the next move. 
 
-The logic for second player moves is the same as used for the first player's moves. It means that 
+
+The logic for second player moves is the same as used for the first player's moves. It means that the 
+move of the second player is sent with a POST request to the `/move/create` endpoint after checking
+if the particular board cell is available, etc. 
+
+
+The question is: How will we know when it is my turn to move? For that, we will use JavaScript's 
+`checkTurn()` function, which asynchronously sends a GET request to the Spring Boot application. In 
+response, the Angular app receives a false or true value and lets the user know if they can move. 
+
+
+For the 'COMPUTER' type of game, the GET request is made after the human player moves. The AI "decides"
+on a play, and moves are once again retrieved. Depending on the outcome, the game either finishes or
+goes on: 
+
+
+```javascript
+function getNextMove() {
+	scope.nextMoveData = []
+	http.get("/move/autocreate").success(function (data, status, headers, config) {
+		scope.nextMoveData = data; 
+		getMoveHistory().success(function () {
+			var gameStatus = scope.movesInGame[scope.movesInGame.length -1].gameStatus;
+			if (gameStatus != 'IN_PROGRESS') {
+				
+				alert(gameStatus)
+			}
+		});
+	}).error(function (data, status, headers, config) {
+		scope.errorMessage = "Cannot send the Move" 
+	});
+}
+```
+
+
+How is the next computer move created? Let's look to the MoveController class and explore the 
+controller function that handles the GET request to the `/move/autocreate` endpoint. 
+
+
+
+```java
+@RequestMapping(value = "/autocreate", method = RequestMethod.GET) 
+public Move autoCreateMove() {
+	
+	Long gameId = (Long) httpSession.getAttribute("gameId');
+	logger.info("AUTO move to insert:" );
+
+	Move move = moveService.autoCreateMove(gameService.getGame(gameId));
+
+	Game game = gameService.getGame(gameId);
+	gameService.updateGameStatus(gameService.getGame(gameId), moveService.checkCurrentGameStatus(game));
+
+	return move; 
+}
+```
+
+
+In order for the computer "player" to move, we need to call the `autoCreateMove()` function from the
+`MoveService` class. The `boardColumn` and `boardRow` are chosen by the `nextAutoMove()` function 
+from the `GameLogic` class. 
+
+
+
+```java 
+public Move autoCreateMove(Game game) {
+	
+	Move move = new Move(); 
+	move.setBoardColumn(GameLogic.nextAutoMove(getTakenMovePositionsInGame(game)).getBoardColumn());
+	move.setBoardRow(GameLogic.nextAutoMove(getTakenMovePositionsInGame(game)).getBoardRow());
+	move.setCreated(new Date());
+	move.setPLayer(null);
+	move.setGame(game);
+
+	moveRepository.save(move);
+
+	return move;
+}
+```
+
+After the autocreate move is marked, `gameStatus` is checked and updated if needed
+
+
+
+<br><br>
+## Conclusion 
+
+We now have an overview of how a simple web-based game can be created. Thanks to Vertabelo for
+providing a straightforward tutorial to follow. 
+
+
+
+
 
 
 
