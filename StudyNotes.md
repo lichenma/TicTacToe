@@ -1563,8 +1563,24 @@ public Move createMove(@RequestBody CreateMoveDTO createMoveDTO) {
 	Long gameId = (Long) httpSession.getAttribute("gameId"); 
 	logger.info("Move to Insert: " + createMoveDTO.getBoardColumn() + createMoveDTO.getBoardRow());
 
+	Move move = moveService.createMove(gameService.getGame(gameId), playerService.getLoggerUser(), createMoveDTO);
+	Game game = gameService.getGame(gameId); 
+	gameService.updateGameStatus(gameService.getGame(gameId), moveService.checkCurrentGameStatus(game));
 
+	return move;
 }
 ```
+
+
+
+### Retrieving the List of Game Moves 
+
+The actual list of the moves in each game is displayed in the right side of the game screen. This 
+section is titled "History of moves in the game" and presents the details about all moves made in a
+single game. The values from this section are updated after every move or when the game page refreshes.
+
+The Angular application stores the list of moves in `scope.movesInGame`. The board is displayed based
+on those values. We want to analyze the sequence of actions individually. 
+
 
 
