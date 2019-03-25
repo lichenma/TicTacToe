@@ -2189,11 +2189,38 @@ public List<MoveDTO> getMovesInGame() {
 
 The responsibility of the `getMovesInGame()` function is to retrieve the moves. 
 
+
+
 ```java 
 public List<MoveDTO> getMovesInGame(Game game) {
+	
+	List<Move> movesInGame = moveRepository.findByGame(game);
+	List<MoveDTO> moves = new ArrayList<>(); 
+	Piece currentPiece = game.getFirstPlayerPieceCode();
+
+	for(Move move : movesInGame) {
+		
+		MoveDTO moveDTO = new MoveDTO(); 
+		moveDTO.setBoardColumn(move.getBoardColumn());
+		moveDTO.setBoardROw(move.getBoardRow());
+		moveDTO.setCreated(move.getCreated());
+		moveDTO.setGameStatus(move.getGame().getGameStatus());
+		moveDTO.setUserName(move.getPlayer() == null ? GameType.COMPUTER.toString() : move.getPlayer().getUserName());
+		moveDTO.setPlayerPieceCode(currentPiece);
+		moves.add(moveDTO); 
+
+		currentPiece = currentPiece == Piece.X ? Piece.O : Piece.X;
+	}
+	
+	return moves;
 }
 ```
 
+
+## Second Player Moves 
+
+What happens next? Before we perform any other actions, we need to check the status of the game. If the
+status is still `IN_PROGRESS`, a move can be made. 
 
 
 
