@@ -965,7 +965,161 @@ request('http://www.example.com', function (error, response, body)
 console.log(result); 
 ```
 
-The last line 
+The last line will output "undefined" to the console because at the time that line is being executed, 
+the callback has not been called. Even if the request were somehow to complete before the result 
+variable is printed to the console (highly unlikely), this code will still run to completion before 
+the callback is executed anyway because that is the nature of the non-blocking I/O model in JavaScript. 
+So if we want to do a second request based on the result of the first one we have to do it inside the
+callback function of the first request because that is where the result will be available: 
+
+```javascript 
+request('http://www.example.come', function (firstError, 
+firstResponse, firstBody) {
+	if (firstError) {
+		
+		//Handle the error 
+	}
+	else {
+		request('http://www.example.com/${firstBody.someValue}',
+		function (secondError, secondResponse, secondBody) {
+			if (secondError) {
+				
+				//Handle the error
+			}
+			else {
+				//Use secondBody for something
+			}
+		});
+	}
+});
+```
+
+When we have a callback in a callback like this, the code tends to be a bit less readable and a bit 
+messy. In some cases we may even have a callback in a callback in a callback or even a callback in a
+callback in a callback in a callback. It gets messy. 
+
+
+One thing to note here is the first argument in every callback function will contain an error if 
+something went wrong, or will be empty if all went well. This pattern is called "error first callbacks"
+and is very common. It is the standard pattern for callback-based APIs in NodeJs. This means that for
+every callback declared we need to check if there is an error and that just adds to the mess that is 
+dealing with nested callbacks. 
+
+
+This is the anti-pattern that has been named "callback hell". 
+
+
+
+<br><br> 
+## Promises
+
+A promise is an object that wraps an asynchronous operation and notifies when it is done. This sounds
+exactly like callbacks, but the important differences are in the usage of Promises. Instead of 
+providing a callback, a promise has its own methods which you call to tell the promise what will happen
+when it is successful or when it fails. The methods a promise provides are "then(...)" for when a 
+successful result is available and "catch(...)" for when something went wrong. 
+
+
+There are lots of frameworks for creating and dealing with promises in JavaScript, but all of the 
+examples below assumes that we are using native JavaScript promises as introduced in ES6. 
+
+
+Using a promise this way looks like this: 
+
+```javascript
+someAsyncOperation(someParams) 
+.then(function(result) {
+	// Do something with the result
+})
+.catch(function(error) {
+	//Handle error
+});
+```
+
+
+One important side note here is that "someAsyncOperation(someParams)" is not a Promise itself but a 
+function that returns a Promise. 
+
+The true power of promises is shown when you have several asynchronous operations that depend on each
+other, just like in the example above under "Callback Hell". So let's revisit the case we have a 
+request that depends on the result of another request. This time we are going to use a module called 
+"axios" that is similar to "request" but it uses promises instead of callbacks. This is also to point
+out that callbacks and promises are not interchangeable. 
+
+
+Using axios, the code would instead look like this: 
+
+```javascript
+const axios = require('axios'); 
+
+axios.get('http://www.example.com')
+.then(function (response) { // Response being the result of the first request 
+	//returns another promise to the next .then(...) in the chain 
+
+	return 
+
+axios.get('http://www.example.com/${response.someValue}');
+})
+.then(function response { // Response being the result of the second request
+	// Handle response
+})
+.catch(function (error) {
+	// Handle error
+});
+```
+
+Instead of nesting callbacks inside callbacks inside callbacks, you chain .then() calls together making
+it more readable and easier to follow. Every .then() should either return a new Promise or just a value
+or object which will be passed to the next .then() in the chain. Another important thing to notice is 
+that even though we are doing two different asynchronous request we only have one .catch() where we 
+handle our errors. That's because any error that occurs in the Promise chain will stop further 
+execution and an error will end up in the next .catch() in the chain. 
+
+
+
+Just like with callback based APIs, this is still asynchronous operations. The code that is executed 
+when the request has finished - that is, the subsequent .then() calls - is put on the event loop just 
+like a callback function would be. This means that you **cannot** access any variables passed to or 
+declared in the Promise chain outside the Promise. The same goes for errors thrown in the Promise 
+chain. You must also have at least one .catch() at the end of the Promise chain for you to be able to 
+handle errors that occur. If you do not have a .catch(), any errors will silently pass and you will 
+have no idea why the Promise does not behave as expected. 
+
+
+To make this even clearer, this kind of error handling will not work at all with Promises: 
+
+```javascript
+try {
+	axios.get('http://www.example.com')
+	.then(function response {
+		// Handle response
+	})
+} catch (error) {
+	// Will never end up here even if an error is thrown in the Promise chain
+}
+```
+
+NodeJS will actually issue a warning if you omit a .catch() in the Promise chain by logging this: 
+
+```
+UnhandledPromiseRejectionWarning: Unhandled promise rejection
+DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that
+are not handled will terminate the Node.js process with a non-zero exit code. 
+```
+
+This means that you need to have a .catch() other not having one will be deprecated in a future version
+of NodeJs. 
+
+
+
+
+
+
+
+<br><br>
+## Creating Promises 
+
+
 
 
 
