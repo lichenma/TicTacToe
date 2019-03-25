@@ -1119,7 +1119,25 @@ of NodeJs.
 <br><br>
 ## Creating Promises 
 
+As stated above, callbacks are not interchangeable with Promises. This means tht callback-based APIs
+cannot be used as Promises. The main difference with callback-based APIs is it does not return a value,
+it just executes the callback with the result. A Promise-based API, on the other hand, immediately 
+returns a Promise that wraps the asynchronous operation, and then the caller uses the returned Promise
+object and calls .then() and .catch() on it to declare what will happen when the operations have 
+finished. 
 
+
+The creation of a Promise object is done via the Promise constructor by calling "new Promise()". It 
+takes a function as an argument and that function gets passed two callbacks: one for notifying when
+the operation is successful (resolve) and one for notifying when the operation has failed (reject). 
+What you pass as an argument when calling resolve will be passed to the next then() in the promise 
+chain. The argument passed when calling reject will end up in the next catch(). It is a good idea to 
+make sure that you always pass Error objects when calling reject. 
+
+
+We can wrap a callback based asynchronous operation with a Promise like this: 
+
+```javascript 
 
 
 
