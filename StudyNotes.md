@@ -820,6 +820,41 @@ app.controller('myCtrl', function($scope, $http) {
 
 
 
+
+
+
+<br><br> 
+## Asynchronous JavaScript 
+
+Since, as the title suggests, AngularJS is written in JavaScript, I thought it would also be helpful 
+to go over some JavaScript basics focusing specifically on asynchronous JavaScript: Callbacks, Promises
+and Async/Await. These tend to show up quite often in the AngularJS code that we are going to be 
+working with. 
+
+
+In programming languages like Java or C#, the **main program flow** happens on the main thread or 
+process and **the occurence of events independently of the main program flow** is the spawning of new
+threads or processes that run code in parallel to the **main program flow**. 
+
+
+This is not the case with JavaScript because a JavaScript program is single threaded and all code is 
+executed in a sequence, not in parallel. In JavaScript this is handled by using what is called an 
+`asynchronous non-blocking I/O model`. Essentially, while the execution of JavaScript is blocking, I/O
+operations are not. I/O operations can be fetching data over the internet with Ajax or over WebSocket
+connections, querying data from a database such as MongoDB or accessing the filesystem with the NodeJS
+fs module. All these operations are done in parallel to the execution of your code and it is not 
+JavaScript that does these operations - the underlying engine does it. 
+
+
+
+
+
+
+
+
+
+
+
 <br><br> 
 ## The Player Screen 
 
@@ -861,6 +896,9 @@ The appropriate sequence of actions are visualized in the diagram below:
 
 
 ```
+				      "gameId": "..."
+				       Logged Player 
+
 
 				      httpSession Object
 					
@@ -1584,7 +1622,36 @@ on those values. We want to analyze the sequence of actions individually. Here i
 the request works: 
 
 
+
+1. GET/move/list
+
+2. Retrieve from the session the id of the current game
+
+3. Retrieve the moves from the current game 
+
+4. Spring Boot returns in the response JSON object 
+
+5. Angular saves the response data into scope. MovesIngame is displayed 
+
+
 ```
+				      "gameId": " ... "
+
+				      httpSession Object
+					
+						^	    
+						|	    
+				    	2.	|	    
+		       				v            		3.
+		       1.
+User Computer    -------------->                              <--------------------->  Database 
+				     Spring Boot Application
+     ^
+  5. |		 <--------------
+     |			4.
+
+```
+
 
 
 
