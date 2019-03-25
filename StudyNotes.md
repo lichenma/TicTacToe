@@ -1580,7 +1580,12 @@ section is titled "History of moves in the game" and presents the details about 
 single game. The values from this section are updated after every move or when the game page refreshes.
 
 The Angular application stores the list of moves in `scope.movesInGame`. The board is displayed based
-on those values. We want to analyze the sequence of actions individually. 
+on those values. We want to analyze the sequence of actions individually. Here is a breakdown of how 
+the request works: 
+
+
+```
+
 
 
 
