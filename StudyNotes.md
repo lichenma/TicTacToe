@@ -1178,10 +1178,70 @@ instead is called "promisification". We are "promisifying" a callback-based func
 modules that let you do this in a nice way and version 8 NodeJS has a built in helper called 
 "util.promisify" for doing exactly that. 
 
+
+
 This means that the Promise wrapper above could instead be written like this: 
 
-```javascript 
+
+
+```javascript
+const { promisify } = require('util');
+
+const getAsyncData = promisify(getData); 
+
+getAsyncData("someValue")
+.then(function(result) {
+	// Do stuff
+})
+.catch(function(error) {
+	// Handle error
+});
 ```
+
+
+
+<br><br> 
+## Async/Await 
+
+
+Async/Await is the next step in the evolution of handling asynchronous operations in JavaScript. It 
+gives users two new keyworks to use: "async" and "await". **Async is for declaring that a function will
+handle asynchronous operations and await is used to declare that we want to "await" the result of an
+asynchronous operation inside a function that has the async keyword**. 
+
+
+A basic example of using async/await looks like this: 
+
+```javascript 
+async function getSomeAsyncData(value) {
+	const result = await fetchTheData(someUrl, value);
+	return result;
+}
+```
+
+The following is not a legal use of the await keyword since it can only be utilized inside a function
+with the async keyword in front of it: 
+
+```javascript
+function justANormalFunction(value){
+	
+	//will result in a SyntaxError since async is missing in the function declaration
+	const result = await fetchTheData(someUrl, value);
+	return result; 
+}
+```
+
+
+A function call only have the await keyword if the function being called is "awaitable". A function is
+"awaitable" if it has the async keyword or if it returns a Promise. Earlier we saw that callbacks and
+Promises are not interchangeable and we needed to wrap a callback based function inside a Promise and
+return that Promise. Functions with the async keyword **ARE** interchangeable with functions that 
+returns Promises. 
+
+
+This means that the following will work: 
+
+```javascript
 
 
 
