@@ -1242,6 +1242,62 @@ returns Promises.
 This means that the following will work: 
 
 ```javascript
+function fetchTheData(someValue) {
+	return new Promise(function(resolve, reject) {
+		getData(someValue, function(error, result) {
+			if(error) {
+				reject(error);
+			}
+			else {
+				resolve(result);
+			}
+		})
+	});
+}
+
+async function getSomeAsyncData(value) {
+	const result = await fetchTheData(value);
+	return result;
+}
+```
+
+
+This will also work: 
+
+```javascript 
+async function getSomeData(value) {
+	const result = await fetchTheData(value);
+	return result; 
+}
+
+getSomeData('someValue')
+.then(function(result) {
+	// Do something with the result 
+})
+.catch(function (error) {
+	// Handle error
+});
+```
+
+
+## Error Handling with Async/Await
+
+Inside the scope of an async function you can use try/catch for error handling and even though you 
+await an asynchronous operation, any errors will end up in that catch block: 
+
+```
+
+async function getSomeData(value) {
+	try {
+		const result = await fetchTheData(value);
+		return result;
+	}
+	catch (error) {
+		// Handle error
+	}
+}
+```
+
 
 
 
