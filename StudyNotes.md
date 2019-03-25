@@ -2220,7 +2220,11 @@ public List<MoveDTO> getMovesInGame(Game game) {
 ## Second Player Moves 
 
 What happens next? Before we perform any other actions, we need to check the status of the game. If the
-status is still `IN_PROGRESS`, a move can be made. 
+status is still `IN_PROGRESS`, a move can be made. In games played against 'COMPUTER', the application 
+decides the next move. In a two-player 'COMPETITION' game, the second player to join the game decides
+the next move. 
+
+The logic for second player moves is the same as used for the first player's moves. It means that 
 
 
 
