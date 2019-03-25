@@ -862,7 +862,31 @@ Registering event listeners in a browser with "addEventListener", reading a file
 common APIs that uses callbacks.
 
 
-Here is an example of fetching data from an URL using a module called "request": 
+
+Here is a similar example that we will see in our project: 
+
+```javascript 
+http.post("/move/create", params, {
+   headers: {
+       'Content-Type': 'application/json; charset=UTF-8'
+   }
+}).success(function () {
+   getMoveHistory().success(function () {
+       var gameStatus = scope.movesInGame[scope.movesInGame.length - 1].gameStatus;
+       if (gameStatus == 'IN_PROGRESS') {
+	   getNextMove();
+       } else {
+	   alert(gameStatus)
+       }
+   });
+
+}).error(function (data, status, headers, config) {
+   scope.errorMessage = "Can't send the move"
+});
+```
+
+
+Now, we will explore an example of fetching data from an URL using a module called "request": 
 
 ```javascript
 const request = require('request');
@@ -903,29 +927,26 @@ request('https://www.example.com', handleResponse);
 ```
 
 
-Here is a similar example that we will see in our project: 
+As we can see in the above example, "request" takes a function as its last argument. This function is
+not executed together with the code above. Instead, it is saved to be executed later once the 
+underlying I/O operation of fetching data over HTTP(s) is done. The underlying HTTP(s) request is an
+asynchronous operation taht does not block the execution of the rest of the JavaScript code. The 
+callback function is put on a sort of queue called the `event loop` until it will be executed with a 
+result from the request.
 
-```javascript 
-http.post("/move/create", params, {
-   headers: {
-       'Content-Type': 'application/json; charset=UTF-8'
-   }
-}).success(function () {
-   getMoveHistory().success(function () {
-       var gameStatus = scope.movesInGame[scope.movesInGame.length - 1].gameStatus;
-       if (gameStatus == 'IN_PROGRESS') {
-	   getNextMove();
-       } else {
-	   alert(gameStatus)
-       }
-   });
 
-}).error(function (data, status, headers, config) {
-   scope.errorMessage = "Can't send the move"
-});
-```
 
-As we can see 
+
+
+<br><br>
+## Callback Hell 
+
+Callbacks are a good way to declare what will happen once an I/O operation has a result, but what if 
+you want to use that data in order to make another request? You can only handle the result of the 
+request (if we use the example above) within the callback function provided
+
+
+
 
 
 
