@@ -847,10 +847,85 @@ JavaScript that does these operations - the underlying engine does it.
 
 
 
+<br><br> 
+## Callbacks 
+
+In order for JavaScript to know when an asynchronous operation has a result (this being either returned
+data or an error that occurred during the operation), it points to a function that will be executed 
+once the result is ready. This function is known as a `callback function`. Meanwhile, JavaScript 
+continues its normal execution of code. This is why frameworks that does external calls of different
+kinds have APIs where you provide callback functions to be executed later on. 
 
 
+Registering event listeners in a browser with "addEventListener", reading a files content with 
+"fs.readFile" or registering a middleware in an express web server with "server.use" are examples of 
+common APIs that uses callbacks.
 
 
+Here is an example of fetching data from an URL using a module called "request": 
+
+```javascript
+const request = require('request');
+
+request('https://www.example.com', function (error, response, body)
+{
+	if (error) {
+		
+		// Handle error
+	}
+
+	else {
+		
+		// Successful, do something with the result
+	}
+});
+```
+
+The following works as well and will give the same result as above: 
+
+
+```javascript 
+const request = require('request');
+
+function handleResponse(error, response, body) {
+	
+	if (error) {
+		
+		// Handle error
+	}
+	else {
+		
+		//Successful, do something with the result
+	}
+}
+
+request('https://www.example.com', handleResponse);
+```
+
+
+Here is a similar example that we will see in our project: 
+
+```javascript 
+http.post("/move/create", params, {
+   headers: {
+       'Content-Type': 'application/json; charset=UTF-8'
+   }
+}).success(function () {
+   getMoveHistory().success(function () {
+       var gameStatus = scope.movesInGame[scope.movesInGame.length - 1].gameStatus;
+       if (gameStatus == 'IN_PROGRESS') {
+	   getNextMove();
+       } else {
+	   alert(gameStatus)
+       }
+   });
+
+}).error(function (data, status, headers, config) {
+   scope.errorMessage = "Can't send the move"
+});
+```
+
+As we can see 
 
 
 
