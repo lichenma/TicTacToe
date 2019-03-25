@@ -943,8 +943,29 @@ result from the request.
 
 Callbacks are a good way to declare what will happen once an I/O operation has a result, but what if 
 you want to use that data in order to make another request? You can only handle the result of the 
-request (if we use the example above) within the callback function provided
+request (if we use the example above) within the callback function provided. 
 
+In this example the variable "result" will not have a value when printed to the console at the last
+line: 
+
+```javascript
+const request = require('request');
+let result; 
+request('http://www.example.com', function (error, response, body)
+{
+	if (error) {
+		
+		// Handle error
+	}
+	else {
+
+		result = body;
+	}
+});
+console.log(result); 
+```
+
+The last line 
 
 
 
