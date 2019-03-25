@@ -2145,6 +2145,39 @@ User Computer    -------------->                              <-----------------
 ```
 
 
+After each move or page refresh, the Angular application sends the GET request to the `/move/list` 
+endpoint. 
+
+For this, we use the function `getMoveHistory()`. It uses the Angular HTTP service to make a GET 
+request. The function returns a Promise object, which will be resolved to a response object when the
+request succeeds or fails. Here's how it looks in code: 
+
+```javascript
+function getMoveHistory() {
+	scope.movesInGame = [];
+
+	return http.get('/move/list').success(function (data) {
+		scope.movesInGame = data; 
+		scope.playerMoves = [];
+
+		//paint the board with the positions from the retrieved moves
+		angular.forEach(scope.movesInGame, function (move) {
+			scope.rows[move.boardRow -1][move.boardColumn-1].letter = move.playerPieceCode;
+		});
+		}).error(function (data, status, headers, config) {
+			scope.errorMessage = "Failed to Load Moves in Game"
+		});
+	}
+}
+```
+
+
+
+
+
+
+
+
 
 
 
