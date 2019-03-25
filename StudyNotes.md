@@ -1138,8 +1138,50 @@ make sure that you always pass Error objects when calling reject.
 We can wrap a callback based asynchronous operation with a Promise like this: 
 
 ```javascript 
+function getAsyncData(someValue) {
+	return new Promise(function(resolve, reject) {
+		getData(someValue, function(error, result) {
+			if(error) {
+				reject(error);
+			}
+			else {
+				resolve(result);
+			}
+		})
+	});
+}
+```
+Note that it is within the function being passed to the Promise constructor that we start the 
+asynchronous operation. That function is then responsible for calling resolve(success) when its done
+or reject(error) if there are errors. 
 
+This means that we can use the function "getAsyncData" like this: 
 
+```javascript
+getAsyncData("someValue")
+// Calling resolve in the Promise will get us here to the first then(...) 
+
+.then(function(result) {
+	// Do stuff 
+})
+
+// Calling reject in the Promise will get us here, to the catch(...)
+// Also if there is an error in any then(...) it will end up here 
+
+.catch(function (error) {
+	// Handle error
+});
+```
+
+The process of wrapping a callback based asynchronous function inside a Promise and return that promise
+instead is called "promisification". We are "promisifying" a callback-based function. There are lots of
+modules that let you do this in a nice way and version 8 NodeJS has a built in helper called 
+"util.promisify" for doing exactly that. 
+
+This means that the Promise wrapper above could instead be written like this: 
+
+```javascript 
+```
 
 
 
