@@ -1550,7 +1550,21 @@ public class CreateMoveDTO {
 
 
 Let's consider the function presented below. In it, we invoke the `createMove()` function from the 
+`move` service. It takes three arguments: the `game` object, the current `player` object, and the 
+`createMoveDTO` object with the data from the request. After saving the move, the `updateGameStatus()`
+function is invoked. It looks at the moves in `Game` and checks if the situation in the game has 
+changed after the creation of a new move. If it has, the game will change its status 
 
 
+```java
+@RequestMapping(value = "/create", method = RequestMethod.POST) 
+public Move createMove(@RequestBody CreateMoveDTO createMoveDTO) {
+	
+	Long gameId = (Long) httpSession.getAttribute("gameId"); 
+	logger.info("Move to Insert: " + createMoveDTO.getBoardColumn() + createMoveDTO.getBoardRow());
+
+
+}
+```
 
 
