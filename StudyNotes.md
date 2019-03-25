@@ -2171,9 +2171,28 @@ function getMoveHistory() {
 }
 ```
 
+The request to the server was sent, so now we can move back to the SpringBoot application. The Spring
+function that handles this request is presented below. Based on the `gameId` stored in the session, the
+game object is retrieved from the database. Then, the function `getMovesInGame()` retrieves the game's 
+moves. 
 
 
+```java
+@RequestMapping(value = "/list", method = RequestMethod.GET) 
+public List<MoveDTO> getMovesInGame() {
+	Long gameId = (Long) httpSession.getAttribute("gameId");
 
+	return moveService.getMovesInGame(gameService.getGame(gameId));
+}
+```
+
+
+The responsibility of the `getMovesInGame()` function is to retrieve the moves. 
+
+```java 
+public List<MoveDTO> getMovesInGame(Game game) {
+}
+```
 
 
 
