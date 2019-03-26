@@ -20,6 +20,8 @@ public class DataLoader implements ApplicationRunner {
     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     public void run(ApplicationArguments args) {
         playerRepository.save(new Player("admin", "lichenma123@gmail.com", passwordEncoder.encode("password")));
+        playerRepository.save(new Player("lma", "lichenma@gmail.com", passwordEncoder.encode("password")));
+        playerRepository.save(new Player("jli", "lichenma12@gmail.com", passwordEncoder.encode("password")));
         System.out.println("============= Initialized database =========");
     }
 }

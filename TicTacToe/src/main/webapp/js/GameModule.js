@@ -30,7 +30,6 @@ gameModule.controller('newGameController', ['$rootScope','$scope', '$http', '$lo
                 }
             }).then(function (response) {
                 rootScope.gameId = response.data.id;
-                console.log(rootScope.gameId);
                 location.path('/game/' + rootScope.gameId);
             }).catch(function (response) {
                 location.path('/player/panel');
@@ -46,7 +45,6 @@ gameModule.controller('gamesToJoinController', ['$scope', '$http', '$location',
 
         http.get('/game/list').then(function (response) {
             scope.gamesToJoin=response.data;
-            console.log(response.data);
         }).catch(function (response) {
             location.path('/player/panel');
         });
@@ -78,7 +76,6 @@ gameModule.controller('playerGamesController', ['$scope', '$http', '$location', 
         });
 
         scope.loadGame = function (id) {
-            console.log(id);
             location.path('/game/' + id);
         }
     }]);
@@ -104,7 +101,6 @@ gameModule.controller('gameController', ['$rootScope', '$routeParams', '$scope',
 
                 return http.get('/move/list').then(function (response) {
                     scope.movesInGame=response.data;
-                    console.log(response.data);
                     scope.playerMoves=[];
 
                     //fill the board with positions from the retrieved moves
@@ -119,7 +115,6 @@ gameModule.controller('gameController', ['$rootScope', '$routeParams', '$scope',
             function checkPlayerTurn() {
                 return http.get('/move/turn').then(function (response) {
                     scope.playerTurn=response.data;
-                    console.log(scope.playerTurn);
                 }).catch(function (response) {
                     scope.errorMessage="Failed to get the player turn"
                 });
@@ -132,7 +127,6 @@ gameModule.controller('gameController', ['$rootScope', '$routeParams', '$scope',
                 if(!scope.gameProperties.secondPlayer) {
                     http.get("/move/autocreate").then(function (response) {
                         scope.nextMoveData= response.data;
-                        console.log('computer move' + scope.nextMoveData);
                         getMoveHistory().then(function () {
                             var gameStatus = scope.movesInGame[scope.movesInGame.length-1].gameStatus;
                             if (gameStatus!='IN_PROGRESS') {
@@ -156,11 +150,9 @@ gameModule.controller('gameController', ['$rootScope', '$routeParams', '$scope',
                     var move= scope.movesInGame[i];
                     if (move.boardColumn==boardColumn &&move.boardRow==boardRow) {
                         return false;
-                        console.log('cell is occupied');
                     }
                 }
                 return true;
-                console.log('cell is empty');
             }
 
             scope.rows = [
