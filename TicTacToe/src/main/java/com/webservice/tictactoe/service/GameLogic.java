@@ -2,6 +2,7 @@ package com.webservice.tictactoe.service;
 
 import com.webservice.tictactoe.domain.Game;
 import com.webservice.tictactoe.domain.Position;
+import javafx.geometry.Pos;
 import org.hibernate.collection.internal.PersistentBag;
 
 import java.util.ArrayList;
