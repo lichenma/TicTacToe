@@ -16,7 +16,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Check(constraints = "first_player_piece_code='O' or first_player_piece_code='X'" +
-        "and game_type='COMPUTE' or game_type='COMPETITION' " +
+        "and game_type='COMPUTER' or game_type='COMPETITION' " +
         "and game_status='IN_PROGRESS' or game_status='FIRST_PLAYER_WON' or game_status='SECOND_PLAYER_WON'" +
         "or game_status='TIE' or game_status='WAITS_FOR_PLAYER' ")
 @NoArgsConstructor

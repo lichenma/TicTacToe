@@ -28,10 +28,11 @@ gameModule.controller('newGameController', ['$rootScope','$scope', '$http', '$lo
                 headers: {
                     'Content-Type': 'application/json; charset=UTF-8'
                 }
-            }).success(function (data, status, headers, config) {
-                rootScope.gameId = data.id;
+            }).then(function (response) {
+                rootScope.gameId = response.data.id;
+                console.log(rootScope.gameId);
                 location.path('/game/' + rootScope.gameId);
-            }).error(function (data, status, headers, config) {
+            }).catch(function (response) {
                 location.path('/player/panel');
             });
         }
@@ -43,9 +44,10 @@ gameModule.controller('gamesToJoinController', ['$scope', '$http', '$location',
 
         scope.gamesToJoin=[];
 
-        http.get('/game/list').success(function (data) {
-            scope.gamesToJoin=data;
-        }).error(function (data, status, headers, config) {
+        http.get('/game/list').then(function (response) {
+            scope.gamesToJoin=response.data;
+            console.log(response.data);
+        }).catch(function (response) {
             location.path('/player/panel');
         });
 
@@ -56,9 +58,9 @@ gameModule.controller('gamesToJoinController', ['$scope', '$http', '$location',
                 headers: {
                     'Content-Type': 'application/json; charset=UTF-8'
                 }
-            }).success(function (data) {
-                location.path('/game/' + data.id);
-            }).error(function (data, status, headers, config) {
+            }).then(function (response) {
+                location.path('/game/' + response.data.id);
+            }).catch(function (response) {
                 location.path('/player/panel');
             });
         }
@@ -69,9 +71,9 @@ gameModule.controller('playerGamesController', ['$scope', '$http', '$location', 
 
         scope.playerGames= [];
 
-        http.get('/game/player/list').success(function (data) {
+        http.get('/game/player/list').then(function (data) {
             scope.playerGames = data;
-        }).error(function (data, status, headers, config) {
+        }).catch(function (data, status, headers, config) {
             location.path('/player/panel');
         });
 
@@ -88,11 +90,11 @@ gameModule.controller('gameController', ['$rootScope', '$routeParams', '$scope',
         getInitialData()
 
             function getInitialData() {
-                http.get('/game/'+routeParams.id).success(function (data) {
-                    scope.gameProperties = data;
+                http.get('/game/'+routeParams.id).then(function (response) {
+                    scope.gameProperties = response.data;
                     gameStatus = scope.gameProperties.gameStatus;
                     getMoveHistory();
-                }).error(function (data, status, headers, config) {
+                }).catch(function (response) {
                     scope.errorMessage = "Failed to load game properties";
                 });
             }
@@ -100,23 +102,25 @@ gameModule.controller('gameController', ['$rootScope', '$routeParams', '$scope',
             function getMoveHistory() {
                 scope.movesInGame= [];
 
-                return http.get('/move/list').success(function (data) {
-                    scope.movesInGame=data;
+                return http.get('/move/list').then(function (response) {
+                    scope.movesInGame=response.data;
+                    console.log(response.data);
                     scope.playerMoves=[];
 
                     //fill the board with positions from the retrieved moves
                     angular.forEach(scope.movesInGame, function (move) {
                         scope.rows[move.boardRow-1][move.boardColumn-1].letter = move.playerPieceCode;
                     });
-                }).error(function (data, status, headers, config) {
+                }).catch(function (response) {
                     scope.errorMessage= "Failed to load moves in game"
                 });
             }
 
             function checkPlayerTurn() {
-                return http.get('/move/turn').success(function (data) {
-                    scope.playerTurn=data;
-                }).error(function (data, status, headers, config) {
+                return http.get('/move/turn').then(function (response) {
+                    scope.playerTurn=response.data;
+                    console.log(scope.playerTurn);
+                }).catch(function (response) {
                     scope.errorMessage="Failed to get the player turn"
                 });
             }
@@ -126,15 +130,16 @@ gameModule.controller('gameController', ['$rootScope', '$routeParams', '$scope',
 
                 // Computer is a second player
                 if(!scope.gameProperties.secondPlayer) {
-                    http.get("/move/autocreate").success(function (data, status, headers, config) {
-                        scope.nextMoveData= data;
-                        getMoveHistory().success(function () {
+                    http.get("/move/autocreate").then(function (response) {
+                        scope.nextMoveData= response.data;
+                        console.log('computer move' + scope.nextMoveData);
+                        getMoveHistory().then(function () {
                             var gameStatus = scope.movesInGame[scope.movesInGame.length-1].gameStatus;
                             if (gameStatus!='IN_PROGRESS') {
                                 alert(gameStatus)
                             }
                         });
-                    }).error(function (data, status, headers, config) {
+                    }).catch(function (response) {
                         scope.errorMessage="Can't send move"
                     });
                 }
@@ -151,9 +156,11 @@ gameModule.controller('gameController', ['$rootScope', '$routeParams', '$scope',
                     var move= scope.movesInGame[i];
                     if (move.boardColumn==boardColumn &&move.boardRow==boardRow) {
                         return false;
+                        console.log('cell is occupied');
                     }
                 }
                 return true;
+                console.log('cell is empty');
             }
 
             scope.rows = [
@@ -180,7 +187,7 @@ gameModule.controller('gameController', ['$rootScope', '$routeParams', '$scope',
             });
 
             scope.markPlayerMove=function (column) {
-                checkPlayerTurn().success(function () {
+                checkPlayerTurn().then(function () {
 
                     var boardRow = parseInt(column.id.charAt(0));
                     var boardColumn = parseInt(column.id.charAt(1));
@@ -194,9 +201,9 @@ gameModule.controller('gameController', ['$rootScope', '$routeParams', '$scope',
                                 headers: {
                                     'Content-Type': 'application/json; charset=UTF-8'
                                 }
-                            }).success(function () {
+                            }).then(function () {
 
-                                getMoveHistory().success(function () {
+                                getMoveHistory().then(function () {
 
                                     var gameStatus=scope.movesInGame[scope.movesInGame.length-1].gameStatus;
                                     if (gameStatus=='IN_PROGRESS') {
@@ -206,7 +213,7 @@ gameModule.controller('gameController', ['$rootScope', '$routeParams', '$scope',
                                         alert(gameStatus)
                                     }
                                 });
-                            }).error(function (data, status, headers, config) {
+                            }).catch(function (response) {
                                 scope.errorMessage = "Can't send the move"
                             });
                         }
