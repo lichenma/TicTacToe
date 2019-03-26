@@ -2327,7 +2327,12 @@ To add them into a project requires navigating to the corresponding website, dow
 to the vendor folder. If there any updates we have to go back, redownload and repeat the previous 
 process all over again. 
 
+**Common Commands** 
+```
+bower install bootstrap 
 
+bower update
+```
 
 
 <br><br>
