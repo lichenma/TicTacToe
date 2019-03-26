@@ -2309,6 +2309,28 @@ After the autocreate move is marked, `gameStatus` is checked and updated if need
 
 
 <br><br>
+## Bower 
+
+This is an additional section to cover bower which was used to create some of the dependencies for 
+the webapp section of this application. 
+
+
+Bower is a front-end package manager built by Twitter. It is also known as a package manager for the 
+web and is often used in modern open source and closed source projects to solve many recurrent issues.
+
+**Problems Bower Solves** 
+
+Developing a website or web application these days requires the usage of many front-end frameworks
+like Bootstrap, jQuery, Angular, etc. 
+
+To add them into a project requires navigating to the corresponding website, downloading and moving it 
+to the vendor folder. If there any updates we have to go back, redownload and repeat the previous 
+process all over again. 
+
+
+
+
+<br><br>
 ## Conclusion 
 
 We now have an overview of how a simple web-based game can be created. Thanks to Vertabelo for
