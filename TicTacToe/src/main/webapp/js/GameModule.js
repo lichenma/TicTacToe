@@ -50,14 +50,14 @@ gameModule.controller('gamesToJoinController', ['$scope', '$http', '$location',
         });
 
         scope.joinGame=function (id) {
-            var params={"id":id}
+            var params={"id" : id}
 
             http.post('/game/join', params, {
                 headers: {
                     'Content-Type': 'application/json; charset=UTF-8'
                 }
             }).success(function (data) {
-                location.path('/game/'+data.id);
+                location.path('/game/' + data.id);
             }).error(function (data, status, headers, config) {
                 location.path('/player/panel');
             });
@@ -77,7 +77,7 @@ gameModule.controller('playerGamesController', ['$scope', '$http', '$location', 
 
         scope.loadGame = function (id) {
             console.log(id);
-            location.path('/game/'+id);
+            location.path('/game/' + id);
         }
     }]);
 
@@ -89,8 +89,8 @@ gameModule.controller('gameController', ['$rootScope', '$routeParams', '$scope',
 
             function getInitialData() {
                 http.get('/game/'+routeParams.id).success(function (data) {
-                    scope.gameProperties= data;
-                    gameStatus= scope.gameProperties.gameStatus;
+                    scope.gameProperties = data;
+                    gameStatus = scope.gameProperties.gameStatus;
                     getMoveHistory();
                 }).error(function (data, status, headers, config) {
                     scope.errorMessage="Failed to load game properties";
