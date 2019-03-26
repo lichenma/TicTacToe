@@ -69,9 +69,9 @@ gameModule.controller('playerGamesController', ['$scope', '$http', '$location', 
 
         scope.playerGames= [];
 
-        http.get('/game/player/list').then(function (data) {
-            scope.playerGames = data;
-        }).catch(function (data, status, headers, config) {
+        http.get('/game/player/list').then(function (response) {
+            scope.playerGames = response.data;
+        }).catch(function (response) {
             location.path('/player/panel');
         });
 
