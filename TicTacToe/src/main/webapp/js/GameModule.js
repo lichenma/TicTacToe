@@ -93,7 +93,7 @@ gameModule.controller('gameController', ['$rootScope', '$routeParams', '$scope',
                     gameStatus = scope.gameProperties.gameStatus;
                     getMoveHistory();
                 }).error(function (data, status, headers, config) {
-                    scope.errorMessage="Failed to load game properties";
+                    scope.errorMessage = "Failed to load game properties";
                 });
             }
 
