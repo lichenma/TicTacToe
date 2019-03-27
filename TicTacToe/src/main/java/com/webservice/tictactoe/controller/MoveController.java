@@ -84,6 +84,6 @@ public class MoveController {
 
         Long gameId = (Long) httpSession.getAttribute("gameId");
         return moveService.isPlayerTurn(gameService.getGame(gameId), gameService.getGame(gameId).getFirstPlayer(),
-                gameService.getGame(gameId).getSecondPlayer());
+                gameService.getGame(gameId).getSecondPlayer(), playerService.getLoggedUser());
     }
 }

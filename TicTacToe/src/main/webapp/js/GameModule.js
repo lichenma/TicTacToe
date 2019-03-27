@@ -51,6 +51,7 @@ gameModule.controller('gamesToJoinController', ['$scope', '$http', '$location',
 
         scope.joinGame=function (id) {
             var params={"id" : id}
+            console.log(id);
 
             http.post('/game/join', params, {
                 headers: {

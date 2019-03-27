@@ -115,9 +115,13 @@ public class MoveService {
         return moveRepository.countByGameAndPlayer(game, player);
     }
 
-    public boolean isPlayerTurn(Game game, Player firstPlayer, Player secondPlayer) {
+    public boolean isPlayerTurn(Game game, Player firstPlayer, Player secondPlayer, Player currentPlayer) {
 
-        return GameLogic.playerTurn(getNumberOfPlayerMovesInGame(game, firstPlayer),
+        if (currentPlayer.equals(firstPlayer)){
+            return GameLogic.playerTurn(getNumberOfPlayerMovesInGame(game, firstPlayer),
+                    getNumberOfPlayerMovesInGame(game, secondPlayer));
+        }
+        return !GameLogic.playerTurn(getNumberOfPlayerMovesInGame(game, firstPlayer),
                 getNumberOfPlayerMovesInGame(game, secondPlayer));
     }
 }
