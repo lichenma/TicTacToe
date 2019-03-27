@@ -2335,11 +2335,50 @@ bower update
 ```
 
 
+
 <br><br>
-## Conclusion 
+## Conclusion of Tutorial 
 
 We now have an overview of how a simple web-based game can be created. Thanks to Vertabelo for
 providing a straightforward tutorial to follow. 
+
+
+
+
+
+
+<br><br> 
+## Moving On 
+
+The tutorial was awesome at laying down the groundwork but there were a couple of things which needed
+some upgrades. First of all, the asynchronous javascript functions `success` and `error` are no 
+longer used - being upgraded to the promises and async/await functions mentioned above. 
+
+
+
+Next, the game logic also needed some fixes as COMPETITVE does not work with the current 
+implementation. Right now there is no difference between player 1 and player 2 when they make a call
+to the `/turn` to check if it is their turn. After player 1 makes a move, both players are returned
+a false and the game is effectively deadlocked. We can solve this problem by passing in 
+`playerService.getLoggedUser()` to the function `moveService.isPlayerTurn()`. Then we make the boolean
+return opposite values for player 1 and player 2 - when player one is given false, player two is given
+true thus fixing the game logic. 
+
+
+
+Finally comes the issue of the server being unable to talk to the client. If we play in COMPETITIVE, 
+the two players will have to refresh the page everytime a new move is sent and we definitely do not
+want that from a usability perspective. I plan on diving into **Websockets** as a way to remedy this
+problem and improve on the existing code. 
+
+
+
+
+
+<br><br> 
+## Spring Websockets
+
+
 
 
 
