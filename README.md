@@ -21,7 +21,7 @@ gradle bootrun
 
 ### Prerequisites
 
-Ideally the most recent java and maven versions, I used the following when building and testing the webpage.
+Ideally the most recent java and gradle versions, I used the following when building and testing the webpage.
 
 ```
 Gradle 5.2.1  Java version 1.8.0_192
