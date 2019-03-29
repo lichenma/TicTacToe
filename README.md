@@ -5,14 +5,16 @@ A simple SpringBoot AngularJS Web Service created to help me learn about buildin
 
 ## Getting Started
 
-Heroku Hosting: 
+**Heroku Hosting:**
 
 Occasionally you may find my project hosted at 
 ```
  https://x-and-oh.herokuapp.com/
 ```
 
-Local Hosting: 
+<br>
+
+**Local Hosting:** 
 
 Otherwise Navigate to the `TicTacToe` folder, ensure gradle is installed and run the following: 
 ```
